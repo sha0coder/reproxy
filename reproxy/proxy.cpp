@@ -3,12 +3,16 @@
 
 using namespace std;
 
-proxy::proxy(MainWindow *mainWindow) {
+Proxy::Proxy(MainWindow *mainWindow) {
     this->mainWindow = mainWindow;
     this->acceptLock = false;
-    this->isConnected = false;
+    this->is_connected = false;
 
 
     uniform_int_distribution<int> dist(0, 6);
-    cout << dist(r) << endl;
+    cout << "random num: " << dist(r) << endl;
+}
+
+bool Proxy::isConnected() {
+    return this->is_connected;
 }

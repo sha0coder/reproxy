@@ -10,18 +10,19 @@
 #include <iostream>
 #include "mainwindow.h"
 
-class proxy {
-public:
-    static int IN = 1;
-    static int OUT = 2;
+const int IN = 1;
+const int OUT = 2;
 
+
+class Proxy {
+public:
     int TIMEOUT = 5;
     int lport;
     int rport;
     bool acceptLock;
-    string rhost;
+    std::string rhost;
     bool isUDP;
-    bool isConnected;
+    bool is_connected;
     std::string endpoint;
     int lSock;
     int rSock;
@@ -32,12 +33,12 @@ public:
     std::random_device r;
 
 
-    proxy(MainWindow *mainWindow);
+    Proxy(MainWindow *mainWindow);
     bool isConnected();
     bool isAcceptLocked();
     void wait(int secs);
     void disconnect(bool silent);
-    bool config(int lport, int rport, string rhost, bool isUDP);
+    bool config(int lport, int rport, std::string rhost, bool isUDP);
     void initSockets(bool isUDP);
     void connect();
 
