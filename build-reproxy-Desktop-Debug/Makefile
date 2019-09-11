@@ -50,10 +50,12 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../reproxy/main.cpp \
 		../reproxy/mainwindow.cpp \
-		../reproxy/proxy.cpp moc_mainwindow.cpp
+		../reproxy/proxy.cpp \
+		../reproxy/test.cpp moc_mainwindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		proxy.o \
+		test.o \
 		moc_mainwindow.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -98,6 +100,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		../reproxy/.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -117,9 +120,11 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		../reproxy/reproxy.pro ../reproxy/mainwindow.h \
-		../reproxy/proxy.h ../reproxy/main.cpp \
+		../reproxy/proxy.h \
+		../reproxy/test.h ../reproxy/main.cpp \
 		../reproxy/mainwindow.cpp \
-		../reproxy/proxy.cpp
+		../reproxy/proxy.cpp \
+		../reproxy/test.cpp
 QMAKE_TARGET  = reproxy
 DESTDIR       = 
 TARGET        = reproxy
@@ -174,6 +179,7 @@ Makefile: ../reproxy/reproxy.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -240,6 +246,7 @@ Makefile: ../reproxy/reproxy.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qmake.conf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf:
@@ -276,8 +283,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../reproxy/mainwindow.h ../reproxy/proxy.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../reproxy/main.cpp ../reproxy/mainwindow.cpp ../reproxy/proxy.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../reproxy/mainwindow.h ../reproxy/proxy.h ../reproxy/test.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../reproxy/main.cpp ../reproxy/mainwindow.cpp ../reproxy/proxy.cpp ../reproxy/test.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../reproxy/mainwindow.ui $(DISTDIR)/
 
 
@@ -307,7 +314,9 @@ compiler_rcc_clean:
 compiler_moc_header_make_all: moc_mainwindow.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_mainwindow.cpp
-moc_mainwindow.cpp: ../reproxy/mainwindow.h \
+moc_mainwindow.cpp: ../reproxy/proxy.h \
+		ui_mainwindow.h \
+		../reproxy/mainwindow.h \
 		/usr/lib/x86_64-linux-gnu/qt5/bin/moc
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/ring3/src/reproxy/reproxy -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/6 -I/usr/include/x86_64-linux-gnu/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/x86_64-linux-gnu/6/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/6/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../reproxy/mainwindow.h -o moc_mainwindow.cpp
 
@@ -331,16 +340,22 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 ####### Compile
 
 main.o: ../reproxy/main.cpp ../reproxy/mainwindow.h \
-		../reproxy/proxy.h
+		../reproxy/proxy.h \
+		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../reproxy/main.cpp
 
 mainwindow.o: ../reproxy/mainwindow.cpp ../reproxy/mainwindow.h \
+		../reproxy/proxy.h \
 		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../reproxy/mainwindow.cpp
 
 proxy.o: ../reproxy/proxy.cpp ../reproxy/proxy.h \
+		ui_mainwindow.h \
 		../reproxy/mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o proxy.o ../reproxy/proxy.cpp
+
+test.o: ../reproxy/test.cpp ../reproxy/test.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o test.o ../reproxy/test.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

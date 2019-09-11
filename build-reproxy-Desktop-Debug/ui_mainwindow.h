@@ -23,7 +23,6 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
-#include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTableView>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
@@ -42,12 +41,11 @@ public:
     QLabel *label_3;
     QLineEdit *eRPort;
     QGroupBox *groupBox;
-    QRadioButton *radioButton;
-    QRadioButton *radioButton_2;
+    QRadioButton *rTCP;
+    QRadioButton *rUDP;
     QCheckBox *checkBox;
     QPushButton *bSend;
     QTableView *tHex;
-    QLabel *lStatus;
     QLabel *label_4;
     QLineEdit *eIn;
     QLabel *label_5;
@@ -56,11 +54,17 @@ public:
     QLineEdit *eSize;
     QLabel *label_7;
     QLineEdit *eMutation;
+    QLabel *label_8;
+    QLabel *lStatus;
+    QLabel *label_9;
+    QLineEdit *eId;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuTools;
+    QMenu *menuScripts;
+    QMenu *menuTools_2;
+    QMenu *menuHelp;
     QToolBar *mainToolBar;
-    QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -95,13 +99,13 @@ public:
         groupBox = new QGroupBox(centralWidget);
         groupBox->setObjectName(QStringLiteral("groupBox"));
         groupBox->setGeometry(QRect(580, 0, 71, 91));
-        radioButton = new QRadioButton(groupBox);
-        radioButton->setObjectName(QStringLiteral("radioButton"));
-        radioButton->setGeometry(QRect(10, 30, 51, 23));
-        radioButton->setChecked(true);
-        radioButton_2 = new QRadioButton(groupBox);
-        radioButton_2->setObjectName(QStringLiteral("radioButton_2"));
-        radioButton_2->setGeometry(QRect(10, 60, 61, 23));
+        rTCP = new QRadioButton(groupBox);
+        rTCP->setObjectName(QStringLiteral("rTCP"));
+        rTCP->setGeometry(QRect(10, 30, 51, 23));
+        rTCP->setChecked(true);
+        rUDP = new QRadioButton(groupBox);
+        rUDP->setObjectName(QStringLiteral("rUDP"));
+        rUDP->setGeometry(QRect(10, 60, 61, 23));
         checkBox = new QCheckBox(centralWidget);
         checkBox->setObjectName(QStringLiteral("checkBox"));
         checkBox->setGeometry(QRect(10, 70, 82, 23));
@@ -111,33 +115,45 @@ public:
         tHex = new QTableView(centralWidget);
         tHex->setObjectName(QStringLiteral("tHex"));
         tHex->setGeometry(QRect(10, 100, 641, 401));
-        lStatus = new QLabel(centralWidget);
-        lStatus->setObjectName(QStringLiteral("lStatus"));
-        lStatus->setGeometry(QRect(20, 540, 611, 17));
         label_4 = new QLabel(centralWidget);
         label_4->setObjectName(QStringLiteral("label_4"));
-        label_4->setGeometry(QRect(10, 510, 31, 21));
+        label_4->setGeometry(QRect(140, 510, 31, 21));
         eIn = new QLineEdit(centralWidget);
         eIn->setObjectName(QStringLiteral("eIn"));
-        eIn->setGeometry(QRect(30, 510, 41, 25));
+        eIn->setGeometry(QRect(160, 510, 71, 25));
+        eIn->setReadOnly(true);
         label_5 = new QLabel(centralWidget);
         label_5->setObjectName(QStringLiteral("label_5"));
-        label_5->setGeometry(QRect(80, 510, 31, 21));
+        label_5->setGeometry(QRect(240, 510, 31, 21));
         eOut = new QLineEdit(centralWidget);
         eOut->setObjectName(QStringLiteral("eOut"));
-        eOut->setGeometry(QRect(110, 510, 41, 25));
+        eOut->setGeometry(QRect(270, 510, 71, 25));
+        eOut->setReadOnly(true);
         label_6 = new QLabel(centralWidget);
         label_6->setObjectName(QStringLiteral("label_6"));
-        label_6->setGeometry(QRect(160, 510, 31, 21));
+        label_6->setGeometry(QRect(350, 510, 31, 21));
         eSize = new QLineEdit(centralWidget);
         eSize->setObjectName(QStringLiteral("eSize"));
-        eSize->setGeometry(QRect(190, 510, 111, 25));
+        eSize->setGeometry(QRect(380, 510, 101, 25));
         label_7 = new QLabel(centralWidget);
         label_7->setObjectName(QStringLiteral("label_7"));
-        label_7->setGeometry(QRect(510, 510, 61, 21));
+        label_7->setGeometry(QRect(490, 510, 61, 21));
         eMutation = new QLineEdit(centralWidget);
         eMutation->setObjectName(QStringLiteral("eMutation"));
-        eMutation->setGeometry(QRect(570, 510, 81, 25));
+        eMutation->setGeometry(QRect(550, 510, 81, 25));
+        label_8 = new QLabel(centralWidget);
+        label_8->setObjectName(QStringLiteral("label_8"));
+        label_8->setGeometry(QRect(640, 510, 54, 21));
+        lStatus = new QLabel(centralWidget);
+        lStatus->setObjectName(QStringLiteral("lStatus"));
+        lStatus->setGeometry(QRect(10, 540, 621, 17));
+        label_9 = new QLabel(centralWidget);
+        label_9->setObjectName(QStringLiteral("label_9"));
+        label_9->setGeometry(QRect(10, 510, 31, 21));
+        eId = new QLineEdit(centralWidget);
+        eId->setObjectName(QStringLiteral("eId"));
+        eId->setGeometry(QRect(30, 510, 101, 25));
+        eId->setReadOnly(true);
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -146,16 +162,22 @@ public:
         menuFile->setObjectName(QStringLiteral("menuFile"));
         menuTools = new QMenu(menuBar);
         menuTools->setObjectName(QStringLiteral("menuTools"));
+        menuScripts = new QMenu(menuBar);
+        menuScripts->setObjectName(QStringLiteral("menuScripts"));
+        menuTools_2 = new QMenu(menuBar);
+        menuTools_2->setObjectName(QStringLiteral("menuTools_2"));
+        menuHelp = new QMenu(menuBar);
+        menuHelp->setObjectName(QStringLiteral("menuHelp"));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
         MainWindow->addToolBar(Qt::TopToolBarArea, mainToolBar);
-        statusBar = new QStatusBar(MainWindow);
-        statusBar->setObjectName(QStringLiteral("statusBar"));
-        MainWindow->setStatusBar(statusBar);
 
         menuBar->addAction(menuFile->menuAction());
         menuBar->addAction(menuTools->menuAction());
+        menuBar->addAction(menuScripts->menuAction());
+        menuBar->addAction(menuTools_2->menuAction());
+        menuBar->addAction(menuHelp->menuAction());
 
         retranslateUi(MainWindow);
 
@@ -170,17 +192,22 @@ public:
         label_2->setText(QApplication::translate("MainWindow", "remote host:", Q_NULLPTR));
         label_3->setText(QApplication::translate("MainWindow", "remote port:", Q_NULLPTR));
         groupBox->setTitle(QApplication::translate("MainWindow", "Protocol:", Q_NULLPTR));
-        radioButton->setText(QApplication::translate("MainWindow", "TCP", Q_NULLPTR));
-        radioButton_2->setText(QApplication::translate("MainWindow", "UDP", Q_NULLPTR));
+        rTCP->setText(QApplication::translate("MainWindow", "TCP", Q_NULLPTR));
+        rUDP->setText(QApplication::translate("MainWindow", "UDP", Q_NULLPTR));
         checkBox->setText(QApplication::translate("MainWindow", "Auto send", Q_NULLPTR));
         bSend->setText(QApplication::translate("MainWindow", ">>> Send >>>", Q_NULLPTR));
-        lStatus->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
         label_4->setText(QApplication::translate("MainWindow", "IN:", Q_NULLPTR));
         label_5->setText(QApplication::translate("MainWindow", "OUT:", Q_NULLPTR));
         label_6->setText(QApplication::translate("MainWindow", "Size:", Q_NULLPTR));
         label_7->setText(QApplication::translate("MainWindow", "Mutation:", Q_NULLPTR));
+        label_8->setText(QApplication::translate("MainWindow", "%", Q_NULLPTR));
+        lStatus->setText(QApplication::translate("MainWindow", "Dissconnected", Q_NULLPTR));
+        label_9->setText(QApplication::translate("MainWindow", "ID:", Q_NULLPTR));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", Q_NULLPTR));
-        menuTools->setTitle(QApplication::translate("MainWindow", "Tools", Q_NULLPTR));
+        menuTools->setTitle(QApplication::translate("MainWindow", "Edit", Q_NULLPTR));
+        menuScripts->setTitle(QApplication::translate("MainWindow", "Scripts", Q_NULLPTR));
+        menuTools_2->setTitle(QApplication::translate("MainWindow", "Tools", Q_NULLPTR));
+        menuHelp->setTitle(QApplication::translate("MainWindow", "Help", Q_NULLPTR));
     } // retranslateUi
 
 };
