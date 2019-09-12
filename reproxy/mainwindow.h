@@ -32,7 +32,7 @@ public:
 
 
 public slots:
-    void testSignal();
+    void setStatus(QString &msg);
 
 private slots:
     void on_bConnect_clicked();

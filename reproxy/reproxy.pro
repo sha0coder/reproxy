@@ -22,12 +22,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+#INCLUDEPATH += /opt/Qt/5.13.1/Src/qtbase/include/
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    proxy.cpp
+    proxy.cpp \
+    socket.cpp \
+    rproxy.cpp
 
 HEADERS  += mainwindow.h \
-    proxy.h
+    proxy.h \
+    socket.h \
+    rproxy.h
 
 FORMS    += mainwindow.ui

@@ -2,6 +2,17 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <netdb.h>
+#include <errno.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/select.h>
+#include <netinet/in.h>
+
+
 using namespace std;
 
 Proxy::Proxy(Ui::MainWindow *ui) {
@@ -125,6 +136,7 @@ void Proxy::disconnect(bool silent) {
     ui->bConnect->setText("Connect");
     ui->bConnect->setEnabled(true);
 }*/
+
 
 void Proxy::startTCPProxy() {
     int r, rSock;

@@ -51,11 +51,11 @@ OBJECTS_DIR   = ./
 SOURCES       = ../reproxy/main.cpp \
 		../reproxy/mainwindow.cpp \
 		../reproxy/proxy.cpp \
-		../reproxy/test.cpp moc_mainwindow.cpp
+		../reproxy/socket.cpp moc_mainwindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		proxy.o \
-		test.o \
+		socket.o \
 		moc_mainwindow.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -121,10 +121,10 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		../reproxy/reproxy.pro ../reproxy/mainwindow.h \
 		../reproxy/proxy.h \
-		../reproxy/test.h ../reproxy/main.cpp \
+		../reproxy/socket.h ../reproxy/main.cpp \
 		../reproxy/mainwindow.cpp \
 		../reproxy/proxy.cpp \
-		../reproxy/test.cpp
+		../reproxy/socket.cpp
 QMAKE_TARGET  = reproxy
 DESTDIR       = 
 TARGET        = reproxy
@@ -283,8 +283,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../reproxy/mainwindow.h ../reproxy/proxy.h ../reproxy/test.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../reproxy/main.cpp ../reproxy/mainwindow.cpp ../reproxy/proxy.cpp ../reproxy/test.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../reproxy/mainwindow.h ../reproxy/proxy.h ../reproxy/socket.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../reproxy/main.cpp ../reproxy/mainwindow.cpp ../reproxy/proxy.cpp ../reproxy/socket.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../reproxy/mainwindow.ui $(DISTDIR)/
 
 
@@ -341,7 +341,8 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 
 main.o: ../reproxy/main.cpp ../reproxy/mainwindow.h \
 		../reproxy/proxy.h \
-		ui_mainwindow.h
+		ui_mainwindow.h \
+		../reproxy/socket.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../reproxy/main.cpp
 
 mainwindow.o: ../reproxy/mainwindow.cpp ../reproxy/mainwindow.h \
@@ -354,8 +355,8 @@ proxy.o: ../reproxy/proxy.cpp ../reproxy/proxy.h \
 		../reproxy/mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o proxy.o ../reproxy/proxy.cpp
 
-test.o: ../reproxy/test.cpp ../reproxy/test.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o test.o ../reproxy/test.cpp
+socket.o: ../reproxy/socket.cpp ../reproxy/socket.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o socket.o ../reproxy/socket.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

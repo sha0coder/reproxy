@@ -3,13 +3,16 @@
 #include "proxy.h"
 
 
-
+#include <QObject>
+#include <QCoreApplication>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainWindow) {
     ui->setupUi(this);
     silent = false;
     isReadyForSend = false;
     ui->lStatus->setText("Disconnected.");
+
+
 
 }
 
@@ -20,6 +23,9 @@ MainWindow::~MainWindow() {
 void MainWindow::setProxy(Proxy *proxy) {
     this->proxy = proxy;
     enableSettings();
+
+
+    //QObject::connect(proxy, SIGNAL(setStatus(QString&)), this, SLOT(setStatus(QString&)));
 
     //this->proxy->setMainWindow((void *)this);
     //this->proxy->check();
@@ -59,6 +65,12 @@ void MainWindow::box(QString msg) {
     msgBox.exec();
 }
 
+// signals
+
+void MainWindow::setStatus(QString &msg) {
+    this->ui->lStatus->setText(msg);
+}
+
 // button Events
 
 void MainWindow::on_bConnect_clicked() {
@@ -68,7 +80,8 @@ void MainWindow::on_bConnect_clicked() {
 
         if (proxy->settings(ui->eLPort->text().toInt(), ui->eRHost->text(), ui->eRPort->text().toInt(), ui->rUDP->isChecked())) {
             disableSettings();
-            std::thread th(&Proxy::start, proxy); //, &this->ui);
+
+            //std::thread th(&Proxy::start, proxy); //, &this->ui);
 
         } else {
             box("Incorrect settings!");
@@ -86,9 +99,5 @@ void MainWindow::on_bConnect_clicked() {
 void MainWindow::on_bSend_clicked() {
     if (proxy->isConnected())
         isReadyForSend = true;
-}
-
-void MainWindow::testSignal() {
-    std::cout << "lol" << std::endl;
 }
 

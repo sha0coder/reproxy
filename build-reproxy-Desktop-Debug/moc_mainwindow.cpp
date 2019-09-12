@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[5];
-    char stringdata0[60];
+    QByteArrayData data[7];
+    char stringdata0[72];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -30,14 +30,16 @@ struct qt_meta_stringdata_MainWindow_t {
 static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_MainWindow = {
     {
 QT_MOC_LITERAL(0, 0, 10), // "MainWindow"
-QT_MOC_LITERAL(1, 11, 10), // "testSignal"
-QT_MOC_LITERAL(2, 22, 0), // ""
-QT_MOC_LITERAL(3, 23, 19), // "on_bConnect_clicked"
-QT_MOC_LITERAL(4, 43, 16) // "on_bSend_clicked"
+QT_MOC_LITERAL(1, 11, 9), // "setStatus"
+QT_MOC_LITERAL(2, 21, 0), // ""
+QT_MOC_LITERAL(3, 22, 8), // "QString&"
+QT_MOC_LITERAL(4, 31, 3), // "msg"
+QT_MOC_LITERAL(5, 35, 19), // "on_bConnect_clicked"
+QT_MOC_LITERAL(6, 55, 16) // "on_bSend_clicked"
 
     },
-    "MainWindow\0testSignal\0\0on_bConnect_clicked\0"
-    "on_bSend_clicked"
+    "MainWindow\0setStatus\0\0QString&\0msg\0"
+    "on_bConnect_clicked\0on_bSend_clicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -55,12 +57,12 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   29,    2, 0x0a /* Public */,
-       3,    0,   30,    2, 0x08 /* Private */,
-       4,    0,   31,    2, 0x08 /* Private */,
+       1,    1,   29,    2, 0x0a /* Public */,
+       5,    0,   32,    2, 0x08 /* Private */,
+       6,    0,   33,    2, 0x08 /* Private */,
 
  // slots: parameters
-    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 3,    4,
     QMetaType::Void,
     QMetaType::Void,
 
@@ -73,13 +75,12 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         MainWindow *_t = static_cast<MainWindow *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->testSignal(); break;
+        case 0: _t->setStatus((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 1: _t->on_bConnect_clicked(); break;
         case 2: _t->on_bSend_clicked(); break;
         default: ;
         }
     }
-    Q_UNUSED(_a);
 }
 
 const QMetaObject MainWindow::staticMetaObject = {

@@ -29,6 +29,7 @@ const int OUT = 2;
 
 class Proxy {
 
+
 private:
     int TIMEOUT = 5;
     int lPort;
@@ -60,6 +61,8 @@ public:
     void disconnect(bool silent);
     void initSockets(bool isUDP);
 
+signals:
+    void setStatus(QString &status);
 
 protected:
     bool sockaddrConfig();
