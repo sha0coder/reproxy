@@ -22,8 +22,8 @@ bool RSocket::ok() {
     return (err.size() == 0);
 }
 
-std::string RSocket::getError() {
-    return err;
+const char *RSocket::getError() {
+    return err.c_str();
 }
 
 void RSocket::setError(std::string msg) {

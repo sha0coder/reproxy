@@ -62,10 +62,20 @@ void RProxy::run() {
     emit setStatus("Starting RProxy");
     emit sigConnected();
 
+    rSock = new RSocket(!isUDP, CONNECTION_TIMEOUT);
+    rSock->dial(rHost.toStdString(), rPort);
+    if (!rSock->ok()) {
+        emit setStatus(QString::fromUtf8(rSock->getError()));
+        return;
+    }
 
     while (isRunning) {
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
+
+
+    //rSock.shutdown();
+    delete rSock;
 
     emit sigDisconnected();
     emit setStatus("RProxy end");

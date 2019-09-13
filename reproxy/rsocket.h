@@ -14,6 +14,7 @@
 #include <sys/select.h>
 #include <netinet/in.h>
 
+
 class RSocket {
 public:
     RSocket();
@@ -21,7 +22,7 @@ public:
     ~RSocket();
     int getSock();
     void setTimeout(int secs);
-    std::string getError();
+    const char *getError();
     bool ok();
     bool timeout();
     void dial(std::string host, int port);
@@ -34,7 +35,6 @@ public:
     bool connected();
     bool isReadyForRead();
     bool isReadyForWrite();*/
-
 
 
 private:

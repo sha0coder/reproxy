@@ -20,8 +20,8 @@ private:
     bool isOk;
     bool isRunning;
     QString rHost;
-    RSocket rSock;
-    RSocket lSock;
+    RSocket *rSock;
+    RSocket *lSock;
 
 public:
     explicit RProxy(QObject *parent = 0);
