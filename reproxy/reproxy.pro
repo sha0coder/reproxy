@@ -27,12 +27,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp\
         mainwindow.cpp \
     proxy.cpp \
-    socket.cpp \
-    rproxy.cpp
+    rproxy.cpp \
+    rsocket.cpp
 
 HEADERS  += mainwindow.h \
     proxy.h \
-    socket.h \
-    rproxy.h
+    rproxy.h \
+    rsocket.h
 
 FORMS    += mainwindow.ui

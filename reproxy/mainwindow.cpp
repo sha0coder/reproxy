@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "proxy.h"
 
 
 #include <QObject>
@@ -12,23 +11,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
     isReadyForSend = false;
     ui->lStatus->setText("Disconnected.");
 
+    proxy = new RProxy(this);
+    connect(proxy, SIGNAL(setStatus(QString)), this, SLOT(setStatusMessage(QString)));
+    connect(proxy, SIGNAL(sigConnected()), this, SLOT(statConnected()));
+    connect(proxy, SIGNAL(sigDisconnected()), this, SLOT(statDisconnected()));
 
-
+    clear();
 }
 
 MainWindow::~MainWindow() {
     delete ui;
-}
-
-void MainWindow::setProxy(Proxy *proxy) {
-    this->proxy = proxy;
-    enableSettings();
-
-
-    //QObject::connect(proxy, SIGNAL(setStatus(QString&)), this, SLOT(setStatus(QString&)));
-
-    //this->proxy->setMainWindow((void *)this);
-    //this->proxy->check();
 }
 
 void MainWindow::clear() {
@@ -65,39 +57,55 @@ void MainWindow::box(QString msg) {
     msgBox.exec();
 }
 
-// signals
+// slots
 
-void MainWindow::setStatus(QString &msg) {
+void MainWindow::setStatusMessage(QString msg) {
     this->ui->lStatus->setText(msg);
+}
+
+void MainWindow::statConnected() {
+    disableSettings();
+    ui->bConnect->setText("Disconnect");
+}
+
+void MainWindow::statDisconnected() {
+    enableSettings();
+    ui->bConnect->setText("Connect");
+    box("disconnected");
 }
 
 // button Events
 
 void MainWindow::on_bConnect_clicked() {
-    if (!proxy->isRunning()) {
+
+
+
+    if (!proxy->running()) {
+
         // Connect
-        clear();
 
-        if (proxy->settings(ui->eLPort->text().toInt(), ui->eRHost->text(), ui->eRPort->text().toInt(), ui->rUDP->isChecked())) {
-            disableSettings();
+        proxy->setLPort(ui->eLPort->text().toInt());
+        proxy->setRHost(ui->eRHost->text());
+        proxy->setRPort(ui->eRPort->text().toInt());
+        if (ui->rUDP->isChecked())
+            proxy->setUDP();
+        else
+            proxy->setTCP();
 
-            //std::thread th(&Proxy::start, proxy); //, &this->ui);
 
-        } else {
-            box("Incorrect settings!");
-        }
+        if (proxy->ok())
+            proxy->start();
+
 
     } else {
         // Dissconnect
 
         proxy->stop();
-        enableSettings();
-        box("Dissconnected!");
     }
 }
 
 void MainWindow::on_bSend_clicked() {
-    if (proxy->isConnected())
+    if (proxy->running())
         isReadyForSend = true;
 }
 

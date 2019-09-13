@@ -1,7 +1,10 @@
-#include "socket.h"
+#include "rsocket.h"
 
+RSocket::RSocket() {
+    RSocket(true, 10);
+}
 
-Socket::Socket(bool isTcp, int secs) {
+RSocket::RSocket(bool isTcp, int secs) {
     err = "";
     this->isTcp = isTcp;
     this->isTimeout = false;
@@ -15,20 +18,20 @@ Socket::Socket(bool isTcp, int secs) {
     setNonBlocking();
 }
 
-bool Socket::ok() {
+bool RSocket::ok() {
     return (err.size() == 0);
 }
 
-std::string Socket::getError() {
+std::string RSocket::getError() {
     return err;
 }
 
-void Socket::setError(std::string msg) {
+void RSocket::setError(std::string msg) {
     if (ok())
         err = msg;
 }
 
-void Socket::setNonBlocking() {
+void RSocket::setNonBlocking() {
     int opt;
 
     if ((opt = fcntl (sock, F_GETFL, NULL)) < 0) {
@@ -42,27 +45,27 @@ void Socket::setNonBlocking() {
     }
 }
 
-void Socket::setTimeout(int secs) {
+void RSocket::setTimeout(int secs) {
     tv.tv_usec = 0;
     tv.tv_sec = secs;
 }
 
-int Socket::getSock() {
+int RSocket::getSock() {
     return sock;
 }
 
-bool Socket::timeout() {
+bool RSocket::timeout() {
     return isTimeout;
 }
 
-Socket::~Socket() {
+RSocket::~RSocket() {
     if (sock>=0) {
         close(sock);
         sock = -1;
      }
 }
 
-void Socket::dial(std::string host, int port) {
+void RSocket::dial(std::string host, int port) {
     int r;
 
     struct hostent *h = gethostbyname(host.c_str());
@@ -96,7 +99,7 @@ void Socket::dial(std::string host, int port) {
     return;
 }
 
-void Socket::serve(int port) {
+void RSocket::serve(int port) {
     endpoint.sin_family = AF_INET;
     endpoint.sin_port = htons(port);
     endpoint.sin_addr.s_addr = INADDR_ANY;
@@ -104,14 +107,14 @@ void Socket::serve(int port) {
     return;
 }
 
-void Socket::shutdown() {
+void RSocket::shutdown() {
     if (sock >= 0) {
         close(sock);
         sock = -1;
      }
 }
 
-long int Socket::push(char *data, size_t sz) {
+long int RSocket::push(char *data, size_t sz) {
     long int n;
     int s;
     setError("");
@@ -121,7 +124,7 @@ long int Socket::push(char *data, size_t sz) {
     FD_SET (sock, &wait_set);
     s = select(sock + 1, NULL, &wait_set, NULL, &tv);
     if (s < 0) {
-        setError("socket error");
+        setError("RSocket error");
         return 0;
     }
     if (s == 0) {
@@ -141,7 +144,7 @@ long int Socket::push(char *data, size_t sz) {
 }
 
 
-long int Socket::pop(char *data, size_t sz) {
+long int RSocket::pop(char *data, size_t sz) {
     long int n;
     int s;
     setError("");
@@ -152,7 +155,7 @@ long int Socket::pop(char *data, size_t sz) {
     FD_SET (sock, &wait_set);
     s = select(sock + 1, &wait_set, NULL,  NULL, &tv);
     if (s < 0) {
-        setError("socket error");
+        setError("RSocket error");
         return 0;
     }
     if (s == 0) {

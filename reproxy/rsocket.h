@@ -14,10 +14,11 @@
 #include <sys/select.h>
 #include <netinet/in.h>
 
-class Socket {
+class RSocket {
 public:
-    Socket(bool tcp, int timeout);
-    ~Socket();
+    RSocket();
+    RSocket(bool tcp, int timeout);
+    ~RSocket();
     int getSock();
     void setTimeout(int secs);
     std::string getError();

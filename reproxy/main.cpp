@@ -1,21 +1,18 @@
 #include "mainwindow.h"
-#include "proxy.h"
 #include <QApplication>
 #include <iostream>
 
-#include "socket.h"
+#include "rsocket.h"
 
 using namespace std;
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
     MainWindow win;
-    Proxy *proxy = new Proxy(win.ui);
-    win.setProxy(proxy);
 
     //QObject::connect(proxy, SIGNAL(onSignal()), &win, SLOT(testSignal()));
 
-
+/*
     Socket *sock = new Socket(true, 6);
     sock->dial("google.com", 80);
     if (sock->ok()) {
@@ -40,7 +37,7 @@ int main(int argc, char *argv[]) {
     } else
         cout << sock->getError() << endl;
     delete sock;
-
+*/
 
     win.show();
     return a.exec();

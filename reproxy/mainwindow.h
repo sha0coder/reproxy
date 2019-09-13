@@ -10,7 +10,7 @@
 #include <QObject>
 #include <thread>
 
-#include "proxy.h"
+#include "rproxy.h"
 
 namespace Ui {
 class MainWindow;
@@ -24,7 +24,6 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    void setProxy(Proxy *proxy);
     ~MainWindow();
     Ui::MainWindow *ui;
     void clear();
@@ -32,7 +31,9 @@ public:
 
 
 public slots:
-    void setStatus(QString &msg);
+    void setStatusMessage(QString msg);
+    void statConnected();
+    void statDisconnected();
 
 private slots:
     void on_bConnect_clicked();
@@ -40,7 +41,7 @@ private slots:
 
 private:
     bool silent;
-    Proxy *proxy;
+    RProxy *proxy;
     bool isReadyForSend;
 
     void enableSettings();
