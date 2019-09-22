@@ -99,12 +99,31 @@ void RSocket::dial(std::string host, int port) {
     return;
 }
 
-void RSocket::serve(int port) {
+void RSocket::serve(int port, int simultaneousConnections=1) {
+    int r;
+
     endpoint.sin_family = AF_INET;
-    endpoint.sin_port = htons(port);
-    endpoint.sin_addr.s_addr = INADDR_ANY;
-    setError("not implemented");
-    return;
+    endpoint.sin_port = htons((unsigned short)port);
+    endpoint.sin_addr.s_addr = htonl(INADDR_ANY);
+
+    r = bind(sock, (struct sockaddr *)&endpoint, sizeof(endpoint));
+    if (r<0) {
+        setError("Cant bind the port!");
+        return;
+    }
+
+    r = listen(sock, simultaneousConnections);
+    if (r<0) {
+        setError("cant listen on that port");
+        return;
+    }
+
+    cSock = accept(sock, (struct sockaddr *)&client, &clientLen);
+    if (cSock < 0) {
+        setError("cant accept the incomming connection");
+        return;
+    }
+
 }
 
 void RSocket::shutdown() {
@@ -167,12 +186,77 @@ long int RSocket::pop(char *data, size_t sz) {
 
     if (isTcp)
         n = recv(sock, data, sz, 0);
-
+        perror("recv");
     if (n < 0) {
         setError("cant receive data");
         return 0;
     }
 
     return n;
+}
+
+bool RSocket::isReadyForRead(int timeout_secs) {
+    int s;
+    struct timeval tv;
+    tv.tv_usec = 0;
+    tv.tv_sec = timeout_secs;
+
+    fd_set wait_set;
+    FD_ZERO (&wait_set);
+    FD_SET (sock, &wait_set);
+    s = select(sock + 1, &wait_set, NULL,  NULL, &tv);
+    if (s < 0) {
+        return false; // socket error
+    }
+    if (s == 0) {
+        return false; // timeout
+    }
+
+    return true;
+}
+
+bool RSocket::isReadyForWrite(int timeout_secs) {
+    int s;
+    struct timeval tv;
+    tv.tv_usec = 0;
+    tv.tv_sec = timeout_secs;
+
+    fd_set wait_set;
+    FD_ZERO (&wait_set);
+    FD_SET (sock, &wait_set);
+    s = select(sock + 1, NULL, &wait_set,  NULL, &tv);
+    if (s < 0) {
+        return false; // socket error
+    }
+    if (s == 0) {
+        return false; // timeout
+    }
+
+    return true;
+}
+
+char RSocket::wait() {
+    int s;
+    fd_set read_set, write_set, err_set;
+    FD_ZERO(&read_set);
+    FD_ZERO(&write_set);
+    FD_ZERO(&err_set);
+    FD_SET(sock, &read_set);
+    FD_SET(sock, &write_set);
+    FD_SET(sock, &err_set);
+    s = select(sock + 1, &read_set, &write_set, &err_set, NULL);
+    if (s < 0)
+        return 'e';
+    if (s == 0)
+        return 't';
+
+    if (FD_ISSET(sock, &read_set))
+        return 'r';
+    if (FD_ISSET(sock, &write_set))
+        return 'w';
+    if (FD_ISSET(sock, &err_set))
+        return 'E';
+
+    return 'x';
 }
 

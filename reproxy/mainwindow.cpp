@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-
 #include <QObject>
 #include <QCoreApplication>
 
@@ -13,8 +12,21 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
 
     proxy = new RProxy(this);
     connect(proxy, SIGNAL(setStatus(QString)), this, SLOT(setStatusMessage(QString)));
-    connect(proxy, SIGNAL(sigConnected()), this, SLOT(statConnected()));
+    connect(proxy, SIGNAL(sigLConnected()), this, SLOT(statLConnected()));
+    connect(proxy, SIGNAL(sigRConnected()), this, SLOT(statRConnected()));
     connect(proxy, SIGNAL(sigDisconnected()), this, SLOT(statDisconnected()));
+    connect(proxy, SIGNAL(sigCantConnect(QString)), this, SLOT(statCantConnect(QString)));
+    connect(proxy, SIGNAL(sigConnecting()), this, SLOT(statConnecting()));
+
+    QStringList titles;
+    titles << "0" << "1" << "2" << "3" << "4" << "5" << "6" << "7" << "8" << "9" << "A" << "B" << "C" << "D" << "E" << "F" << "Data";
+    ui->tHex->setColumnCount(17);
+    ui->tHex->setHorizontalHeaderLabels(titles);
+    for (int i=0; i<16; i++)
+        ui->tHex->setColumnWidth(i, 18);
+    ui->tHex->setColumnWidth(16, 350);
+
+    //ui->tHex->insertRow(0);
 
     clear();
 }
@@ -63,22 +75,46 @@ void MainWindow::setStatusMessage(QString msg) {
     this->ui->lStatus->setText(msg);
 }
 
-void MainWindow::statConnected() {
+void MainWindow::statRConnected() {
     disableSettings();
+    ui->lStatus->setText("connected to endpoint, waiting for client ...");
     ui->bConnect->setText("Disconnect");
+    ui->bConnect->setEnabled(false);
+    box("connect the client please");
+}
+
+void MainWindow::statLConnected() {
+    disableSettings();
+    ui->lStatus->setText("connected!");
+    ui->bConnect->setText("Disconnect");
+    ui->bConnect->setEnabled(true);
 }
 
 void MainWindow::statDisconnected() {
     enableSettings();
+    ui->lStatus->setText("disconnected");
     ui->bConnect->setText("Connect");
     box("disconnected");
+    ui->bConnect->setEnabled(true);
+}
+
+void MainWindow::statCantConnect(QString errmsg) {
+    enableSettings();
+    ui->lStatus->setText("can't connect "+errmsg);
+    ui->bConnect->setText("Connect");
+    box("cant connect");
+    ui->bConnect->setEnabled(true);
+}
+
+void MainWindow::statConnecting() {
+    disableSettings();
+    ui->lStatus->setText("Connecting ...");
+    ui->bConnect->setEnabled(false);
 }
 
 // button Events
 
 void MainWindow::on_bConnect_clicked() {
-
-
 
     if (!proxy->running()) {
 
@@ -93,9 +129,10 @@ void MainWindow::on_bConnect_clicked() {
             proxy->setTCP();
 
 
-        if (proxy->ok())
+        if (proxy->ok()) {
+            ui->bConnect->setEnabled(false);
             proxy->start();
-
+        }
 
     } else {
         // Dissconnect

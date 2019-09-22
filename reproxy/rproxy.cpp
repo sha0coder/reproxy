@@ -1,5 +1,9 @@
 #include "rproxy.h"
 #include "rsocket.h"
+#include <stdlib.h>
+
+#include <QtCore>
+#include <QtNetwork>
 
 RProxy::RProxy(QObject *parent) : QThread(parent) {
     isRunning = false;
@@ -57,28 +61,63 @@ void RProxy::setTCP() {
 // run
 
 void RProxy::run() {
+    emit sigConnecting();
 
-    isRunning = true;
-    emit setStatus("Starting RProxy");
-    emit sigConnected();
+
+
+    /*
 
     rSock = new RSocket(!isUDP, CONNECTION_TIMEOUT);
     rSock->dial(rHost.toStdString(), rPort);
     if (!rSock->ok()) {
-        emit setStatus(QString::fromUtf8(rSock->getError()));
+        emit sigCantConnect(QString::fromStdString(rSock->getError()));
         return;
     }
 
-    while (isRunning) {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+    emit sigRConnected();
+
+    lSock = new RSocket(!isUDP, CONNECTION_TIMEOUT);
+    lSock->serve(lPort, 1);
+    if (!rSock->ok()) {
+        emit sigCantConnect(QString::fromStdString(rSock->getError()));
+        return;
     }
 
+    isRunning = true;
+    emit sigLConnected();
 
-    //rSock.shutdown();
+    int sz;
+    char *buff;
+    buff = (char *)malloc(1024);
+
+    while (isRunning) {
+        if (lSock->isReadyForRead(1)) {
+            sz = lSock->pop(buff, 1024);
+
+            if (rSock->isReadyForWrite(1))
+                rSock->push(buff, sz);
+            else
+                emit setStatus("cant send the data to server");
+
+        }
+
+        if (rSock->isReadyForRead(1)) {
+            sz = rSock->pop(buff, 1024);
+
+            if (lSock->isReadyForWrite(1))
+                lSock->push(buff, sz);
+            else
+                emit setStatus("cant send the data to client");
+        }
+
+        //std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+
+    free(buff);
+
     delete rSock;
+    delete lSock;*/
 
     emit sigDisconnected();
-    emit setStatus("RProxy end");
 }
-
 

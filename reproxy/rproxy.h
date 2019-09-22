@@ -39,7 +39,10 @@ public:
 signals:
     void setStatus(QString msg);
     void sigDisconnected();
-    void sigConnected();
+    void sigRConnected();
+    void sigLConnected();
+    void sigCantConnect(QString errmsg);
+    void sigConnecting();
 
 public slots:
 };

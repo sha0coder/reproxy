@@ -26,20 +26,23 @@ public:
     bool ok();
     bool timeout();
     void dial(std::string host, int port);
-    void serve(int port);
+    void serve(int port, int num_connections);
     void shutdown();
     long int push(char *data, size_t sz);
     long int pop(char *data, size_t sz);
 
-    /*
-    bool connected();
-    bool isReadyForRead();
-    bool isReadyForWrite();*/
+    //bool connected();
+    bool isReadyForRead(int timeout);
+    bool isReadyForWrite(int timeout);
+    char wait();
 
 
 private:
     int sock;
+    int cSock;
     sockaddr_in endpoint;
+    sockaddr_in client;
+    socklen_t clientLen;
     struct timeval tv;
     bool isTcp;
     bool isConnected;

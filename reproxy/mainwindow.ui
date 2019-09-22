@@ -35,6 +35,15 @@
       <height>25</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>local port number to open for receiving connections from the client.</string>
+    </property>
+    <property name="text">
+     <string>12345</string>
+    </property>
+    <property name="cursorPosition">
+     <number>5</number>
+    </property>
    </widget>
    <widget class="QLineEdit" name="eRHost">
     <property name="geometry">
@@ -44,6 +53,9 @@
       <width>251</width>
       <height>25</height>
      </rect>
+    </property>
+    <property name="text">
+     <string>127.0.0.1</string>
     </property>
    </widget>
    <widget class="QPushButton" name="bConnect">
@@ -106,6 +118,9 @@
       <width>61</width>
       <height>25</height>
      </rect>
+    </property>
+    <property name="text">
+     <string>8080</string>
     </property>
    </widget>
    <widget class="QGroupBox" name="groupBox">
@@ -174,16 +189,6 @@
     </property>
     <property name="text">
      <string>&gt;&gt;&gt; Send &gt;&gt;&gt;</string>
-    </property>
-   </widget>
-   <widget class="QTableView" name="tHex">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>100</y>
-      <width>641</width>
-      <height>401</height>
-     </rect>
     </property>
    </widget>
    <widget class="QLabel" name="label_4">
@@ -336,6 +341,22 @@
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QTableWidget" name="tHex">
+    <property name="geometry">
+     <rect>
+      <x>5</x>
+      <y>101</y>
+      <width>651</width>
+      <height>401</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>1</width>
+      <height>0</height>
+     </size>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -387,6 +408,21 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>eLPort</tabstop>
+  <tabstop>eRHost</tabstop>
+  <tabstop>eRPort</tabstop>
+  <tabstop>bConnect</tabstop>
+  <tabstop>rTCP</tabstop>
+  <tabstop>rUDP</tabstop>
+  <tabstop>checkBox</tabstop>
+  <tabstop>bSend</tabstop>
+  <tabstop>eIn</tabstop>
+  <tabstop>eOut</tabstop>
+  <tabstop>eSize</tabstop>
+  <tabstop>eMutation</tabstop>
+  <tabstop>eId</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

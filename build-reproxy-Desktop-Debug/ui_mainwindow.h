@@ -23,7 +23,7 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
-#include <QtWidgets/QTableView>
+#include <QtWidgets/QTableWidget>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
 
@@ -45,7 +45,6 @@ public:
     QRadioButton *rUDP;
     QCheckBox *checkBox;
     QPushButton *bSend;
-    QTableView *tHex;
     QLabel *label_4;
     QLineEdit *eIn;
     QLabel *label_5;
@@ -58,6 +57,7 @@ public:
     QLabel *lStatus;
     QLabel *label_9;
     QLineEdit *eId;
+    QTableWidget *tHex;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuTools;
@@ -78,6 +78,7 @@ public:
         eLPort = new QLineEdit(centralWidget);
         eLPort->setObjectName(QStringLiteral("eLPort"));
         eLPort->setGeometry(QRect(10, 30, 61, 25));
+        eLPort->setCursorPosition(5);
         eRHost = new QLineEdit(centralWidget);
         eRHost->setObjectName(QStringLiteral("eRHost"));
         eRHost->setGeometry(QRect(80, 30, 251, 25));
@@ -112,9 +113,6 @@ public:
         bSend = new QPushButton(centralWidget);
         bSend->setObjectName(QStringLiteral("bSend"));
         bSend->setGeometry(QRect(100, 60, 471, 31));
-        tHex = new QTableView(centralWidget);
-        tHex->setObjectName(QStringLiteral("tHex"));
-        tHex->setGeometry(QRect(10, 100, 641, 401));
         label_4 = new QLabel(centralWidget);
         label_4->setObjectName(QStringLiteral("label_4"));
         label_4->setGeometry(QRect(140, 510, 31, 21));
@@ -154,6 +152,10 @@ public:
         eId->setObjectName(QStringLiteral("eId"));
         eId->setGeometry(QRect(30, 510, 101, 25));
         eId->setReadOnly(true);
+        tHex = new QTableWidget(centralWidget);
+        tHex->setObjectName(QStringLiteral("tHex"));
+        tHex->setGeometry(QRect(5, 101, 651, 401));
+        tHex->setMinimumSize(QSize(1, 0));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -172,6 +174,18 @@ public:
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
         MainWindow->addToolBar(Qt::TopToolBarArea, mainToolBar);
+        QWidget::setTabOrder(eLPort, eRHost);
+        QWidget::setTabOrder(eRHost, eRPort);
+        QWidget::setTabOrder(eRPort, bConnect);
+        QWidget::setTabOrder(bConnect, rTCP);
+        QWidget::setTabOrder(rTCP, rUDP);
+        QWidget::setTabOrder(rUDP, checkBox);
+        QWidget::setTabOrder(checkBox, bSend);
+        QWidget::setTabOrder(bSend, eIn);
+        QWidget::setTabOrder(eIn, eOut);
+        QWidget::setTabOrder(eOut, eSize);
+        QWidget::setTabOrder(eSize, eMutation);
+        QWidget::setTabOrder(eMutation, eId);
 
         menuBar->addAction(menuFile->menuAction());
         menuBar->addAction(menuTools->menuAction());
@@ -187,10 +201,16 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "rproxy - multi protocol reversing proxy", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        eLPort->setToolTip(QApplication::translate("MainWindow", "local port number to open for receiving connections from the client.", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        eLPort->setText(QApplication::translate("MainWindow", "12345", Q_NULLPTR));
+        eRHost->setText(QApplication::translate("MainWindow", "127.0.0.1", Q_NULLPTR));
         bConnect->setText(QApplication::translate("MainWindow", "Connect", Q_NULLPTR));
         label->setText(QApplication::translate("MainWindow", "local port:", Q_NULLPTR));
         label_2->setText(QApplication::translate("MainWindow", "remote host:", Q_NULLPTR));
         label_3->setText(QApplication::translate("MainWindow", "remote port:", Q_NULLPTR));
+        eRPort->setText(QApplication::translate("MainWindow", "8080", Q_NULLPTR));
         groupBox->setTitle(QApplication::translate("MainWindow", "Protocol:", Q_NULLPTR));
         rTCP->setText(QApplication::translate("MainWindow", "TCP", Q_NULLPTR));
         rUDP->setText(QApplication::translate("MainWindow", "UDP", Q_NULLPTR));

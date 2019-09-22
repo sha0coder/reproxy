@@ -32,8 +32,11 @@ public:
 
 public slots:
     void setStatusMessage(QString msg);
-    void statConnected();
+    void statConnecting();
+    void statRConnected();
+    void statLConnected();
     void statDisconnected();
+    void statCantConnect(QString errmsg);
 
 private slots:
     void on_bConnect_clicked();
