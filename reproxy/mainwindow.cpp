@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
     isReadyForSend = false;
     ui->lStatus->setText("Disconnected.");
 
-    proxy = new RProxy(this);
+    proxy = new Proxy(this);
     connect(proxy, SIGNAL(setStatus(QString)), this, SLOT(setStatusMessage(QString)));
     connect(proxy, SIGNAL(sigLConnected()), this, SLOT(statLConnected()));
     connect(proxy, SIGNAL(sigRConnected()), this, SLOT(statRConnected()));

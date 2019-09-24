@@ -1,79 +1,50 @@
-#ifndef PROXY_H
-#define PROXY_H
+#ifndef RPROXY_H
+#define RPROXY_H
 
-#pragma once
+#include <QThread>
+#include <QObject>
+#include <thread>
+#include <chrono>
 
+#include "rsocket.h"
 
-#include <netdb.h>
-#include <errno.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/select.h>
-#include <netinet/in.h>
-
-#include <string>
-#include <random>
-#include <iostream>
-
-#include "ui_mainwindow.h"
-
-
-using namespace std;
-
-const int IN = 1;
-const int OUT = 2;
-
-
-class Proxy {
-
-
+class Proxy : public QThread
+{
+    Q_OBJECT
 private:
-    int TIMEOUT = 5;
+    int CONNECTION_TIMEOUT = 5;
+    int READWRITE_TIMEOUT = 5;
     int lPort;
     int rPort;
-    /*
-    int lSock;
-    int rSock;
-    int cSock;*/
-    QString rHost;
-    bool acceptLock;
     bool isUDP;
-    bool is_connected;          /* this is the socket connection */
-    bool is_running;            /* this is only to signal stop() */
-    sockaddr_in lEndPoint;
-    sockaddr_in rEndPoint;
-    std::random_device r;
-    Ui::MainWindow *ui;
+    bool isOk;
+    bool isRunning;
+    QString rHost;
+    RSocket *rSock;
+    RSocket *lSock;
 
 public:
-    Proxy(Ui::MainWindow *ui);
-    void setMainWindow(void *mainWindow);
-    bool settings(int lport, QString rhost, int rport, bool isUDP);
-    bool isConnected();
-    bool isAcceptLocked();
-    bool isRunning();
-    void wait(int secs);
-    void start(); //Ui::MainWindow *ui);
-    void stop();
-    void disconnect(bool silent);
-    void initSockets(bool isUDP);
+    explicit RProxy(QObject *parent = 0);
+    void run(void);
+    void stop(void);
+    bool running(void);
+    bool ok();
+
+    void setLPort(int lport);
+    void setRPort(int rport);
+    void setRHost(QString rhost);
+    void setUDP();
+    void setTCP();
 
 signals:
-    void setStatus(QString &status);
+    void setStatus(QString msg);
+    void sigDisconnected();
+    void sigRConnected();
+    void sigLConnected();
+    void sigCantConnect(QString errmsg);
+    void sigConnecting();
 
-protected:
-    bool sockaddrConfig();
-    void tryCloseSocket(int sock);
-    void displayBuffer(char *buff, int sz, int direction);
-    void waitSendButton();
-    char *mutate(char *buff, int sz);
-    bool isSocketConnected(int s);
-    void startTCPProxy();
-    void startUDPProxy();
-    bool setNonBlockingSocket(int *sock);
+public slots:
 };
 
-#endif // PROXY_H
+#endif // RPROXY_H

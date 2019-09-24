@@ -1,192 +1,123 @@
 #include "proxy.h"
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
-
-#include <netdb.h>
-#include <errno.h>
+#include "rsocket.h"
 #include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/select.h>
-#include <netinet/in.h>
 
+#include <QtCore>
+#include <QtNetwork>
 
-using namespace std;
-
-Proxy::Proxy(Ui::MainWindow *ui) {
-    this->acceptLock = false;
-    this->is_connected = false;
-    this->ui = ui;
-    this->is_running = false;
-
-    uniform_int_distribution<int> dist(0, 6);
-    cout << "random num: " << dist(r) << endl;
-}
-
-bool Proxy::settings(int lport, QString rhost, int rport, bool isUDP) {
-    // no port zero allowed for now
-
-    if (lport <= 0) {
-        ui->lStatus->setText("Incorrect local port!");
-        return false;
-    }
-
-    if (rport <= 0) {
-        ui->lStatus->setText("Incorrect remote endpoint port!");
-        return false;
-    }
-
-    if (rhost == "") {
-        ui->lStatus->setText("Incorrect endpoint host!");
-        return false;
-    }
-
-    this->lPort = lport;
-    this->rHost = rhost;
-    this->rPort = rport;
-    this->isUDP = isUDP;
-
-    return sockaddrConfig();
-}
-
-bool Proxy::isConnected() {
-    return this->is_connected;
-}
-
-bool Proxy::isRunning() {
-    return this->is_running;
-}
-
-bool Proxy::sockaddrConfig() {
-    QByteArray brHost = rHost.toLocal8Bit();
-
-    struct hostent *h = gethostbyname(brHost.data());
-    if (!h) {
-        ui->lStatus->setText("Cannot resolve the remote host!");
-        return false;
-    }
-
-    rEndPoint.sin_family = AF_INET;
-    rEndPoint.sin_port = htons(rPort);
-    rEndPoint.sin_addr = *(struct in_addr *)(h->h_addr);
-
-    lEndPoint.sin_family = AF_INET;
-    lEndPoint.sin_port = htons(rPort);
-    lEndPoint.sin_addr.s_addr = INADDR_ANY;
-
-    return true;
-}
-
-bool Proxy::setNonBlockingSocket(int *sock) {
-    int opt;
-
-    if ((opt = fcntl (*sock, F_GETFL, NULL)) < 0) {
-        return false;
-    }
-
-
-    if (fcntl (*sock, F_SETFL, opt | O_NONBLOCK) < 0) {
-        return false;
-    }
-
-    return true;
-}
-
-void Proxy::start(){ //Ui::MainWindow *ui) {
-    //this->ui = ui;
-    ui->bConnect->setEnabled(false);
-    ui->lStatus->setText("Connecting ...");
-
-    if (isUDP)
-        startUDPProxy();
-    else
-        startTCPProxy();
-
-     ui->bConnect->setEnabled(true);
-
-    /*
-    this->is_connected = true;
-    ui->lStatus->setText("Connected.");
-    ui->bConnect->setText("Dissconnect");
-    ui->bConnect->setEnabled(true);
-    */
-
+Proxy::Proxy(QObject *parent) : QThread(parent) {
+    isRunning = false;
+    isUDP = false;
+    isOk = true;
 }
 
 void Proxy::stop() {
-    this->is_running = false;
+    isRunning = false;
+}
+
+bool Proxy::running() {
+    return isRunning;
+}
+
+bool Proxy::ok() {
+    return isOk;
+}
+
+// setters
+
+void Proxy::setLPort(int lport) {
+    lPort = lport;
+    if (lport == 0) {
+        emit setStatus("incorrect local port!");
+        isOk = false;
+    }
+}
+
+void Proxy::setRPort(int rport) {
+    rPort = rport;
+    if (rport == 0) {
+        emit setStatus("incorrect remote port!");
+        isOk = false;
+    }
+}
+
+void Proxy::setRHost(QString rhost) {
+    rHost = rhost;
+    if (rhost.size() == 0) {
+        emit setStatus("incorrect hostname!");
+        isOk = false;
+    }
+}
+
+void Proxy::setUDP() {
+    isUDP = true;
+}
+
+void Proxy::setTCP() {
+    isUDP = false;
 }
 
 
+// run
 
-/*
-void Proxy::disconnect(bool silent) {
-
-    ui->bConnect->setEnabled(false);
-    ui->lStatus->setText("Disconnecting ...");
-
-    close(rSock);
-    close(lSock);
-    close(cSock);
-
-    this->is_connected = false;
-    ui->lStatus->setText("Disconnected.");
-    ui->bConnect->setText("Connect");
-    ui->bConnect->setEnabled(true);
-}*/
+void Proxy::run() {
+    emit sigConnecting();
 
 
-void Proxy::startTCPProxy() {
-    int r, rSock;
-    struct timeval timeout;
-    timeout.tv_sec = 8;
-    timeout.tv_usec = 0;
 
-    rSock = socket(AF_INET, SOCK_STREAM, 0);
-    if (rSock<1) {
-        ui->lStatus->setText("can not create a socket.");
+    /*
+
+    rSock = new RSocket(!isUDP, CONNECTION_TIMEOUT);
+    rSock->dial(rHost.toStdString(), rPort);
+    if (!rSock->ok()) {
+        emit sigCantConnect(QString::fromStdString(rSock->getError()));
         return;
     }
 
-    if (!setNonBlockingSocket(&rSock)) {
-        ui->lStatus->setText("can not create a non blocking socket.");
+    emit sigRConnected();
+
+    lSock = new RSocket(!isUDP, CONNECTION_TIMEOUT);
+    lSock->serve(lPort, 1);
+    if (!rSock->ok()) {
+        emit sigCantConnect(QString::fromStdString(rSock->getError()));
         return;
     }
 
-    r = connect(rSock, (struct sockaddr *)&this->rEndPoint, sizeof(this->rEndPoint));
-    if (r<0) {
-        if (errno == EINPROGRESS) {
-            fd_set wait_set;
-            FD_ZERO (&wait_set);
-            FD_SET (rSock, &wait_set);
+    isRunning = true;
+    emit sigLConnected();
 
-            r = select (rSock + 1, &wait_set, &wait_set, NULL, &timeout);
-        } else {
-            ui->lStatus->setText("can not connect");
-            return;
+    int sz;
+    char *buff;
+    buff = (char *)malloc(1024);
+
+    while (isRunning) {
+        if (lSock->isReadyForRead(1)) {
+            sz = lSock->pop(buff, 1024);
+
+            if (rSock->isReadyForWrite(1))
+                rSock->push(buff, sz);
+            else
+                emit setStatus("cant send the data to server");
+
         }
+
+        if (rSock->isReadyForRead(1)) {
+            sz = rSock->pop(buff, 1024);
+
+            if (lSock->isReadyForWrite(1))
+                lSock->push(buff, sz);
+            else
+                emit setStatus("cant send the data to client");
+        }
+
+        //std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
-    if (r <= 0) {
-        ui->lStatus->setText("can not connect.");
-        return;
-    }
+    free(buff);
 
-    // CONNECTED TO RHOST
-    this->is_connected = true;
-    this->is_running = true;
-    ui->lStatus->setText("Connected.");
-    ui->bConnect->setText("Dissconnect");
-    ui->bConnect->setEnabled(true);
+    delete rSock;
+    delete lSock;*/
 
-
-
-    close(rSock);
-
+    emit sigDisconnected();
 }
 
-void Proxy::startUDPProxy() {
-
-}

@@ -10,7 +10,7 @@
 #include <QObject>
 #include <thread>
 
-#include "rproxy.h"
+#include "proxy.h"
 
 namespace Ui {
 class MainWindow;
