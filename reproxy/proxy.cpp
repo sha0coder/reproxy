@@ -2,13 +2,13 @@
 #include "rsocket.h"
 #include <stdlib.h>
 
-#include <QtCore>
-#include <QtNetwork>
+
 
 Proxy::Proxy(QObject *parent) : QThread(parent) {
     isRunning = false;
     isUDP = false;
     isOk = true;
+
 }
 
 void Proxy::stop() {
@@ -63,61 +63,132 @@ void Proxy::setTCP() {
 void Proxy::run() {
     emit sigConnecting();
 
-
-
-    /*
-
-    rSock = new RSocket(!isUDP, CONNECTION_TIMEOUT);
-    rSock->dial(rHost.toStdString(), rPort);
-    if (!rSock->ok()) {
-        emit sigCantConnect(QString::fromStdString(rSock->getError()));
+    rTSock = new QTcpSocket();
+    rTSock->connectToHost(rHost, rPort);
+    //connect(rTSock, SIGNAL(disconnected()), this, SLOT(onTcpRemoteDisconnected()));
+    //connect(rTSock, SIGNAL(readyRead()), this, SLOT(onReadTcpRemote()));
+    if (!rTSock->waitForConnected(CONNECTION_TIMEOUT)) {
+        emit sigCantConnect("cannot connect.");
+        rTSock->close();
+        delete rTSock;
         return;
     }
+
 
     emit sigRConnected();
 
-    lSock = new RSocket(!isUDP, CONNECTION_TIMEOUT);
-    lSock->serve(lPort, 1);
-    if (!rSock->ok()) {
-        emit sigCantConnect(QString::fromStdString(rSock->getError()));
-        return;
-    }
+    lTSock = NULL;
+    lTServer = new QTcpServer();
+    //connect(lTServer, SIGNAL(newConnection()), this, SLOT(onNewTcpConnection()));
+    lTServer->listen(QHostAddress::Any, lPort);
+    lTServer->waitForNewConnection(LISTEN_TIMEOUT);
+    lTSock = lTServer->nextPendingConnection();
+
+    buff = (char *)malloc(BUFF_SZ+1);
+    qint64 sz;
 
     isRunning = true;
     emit sigLConnected();
 
-    int sz;
-    char *buff;
-    buff = (char *)malloc(1024);
 
+    qDebug() << "start the party" << endl;
     while (isRunning) {
-        if (lSock->isReadyForRead(1)) {
-            sz = lSock->pop(buff, 1024);
 
-            if (rSock->isReadyForWrite(1))
-                rSock->push(buff, sz);
-            else
-                emit setStatus("cant send the data to server");
 
+        if (lTSock->waitForReadyRead(READ_TIMEOUT)) {
+
+            memset(buff, 0, BUFF_SZ);
+            sz = lTSock->read(buff, BUFF_SZ);
+            if (sz > 0) {
+                rTSock->write(buff, sz);
+                qDebug() << ">> " << buff << endl;
+                rTSock->flush();
+            }
         }
 
-        if (rSock->isReadyForRead(1)) {
-            sz = rSock->pop(buff, 1024);
-
-            if (lSock->isReadyForWrite(1))
-                lSock->push(buff, sz);
-            else
-                emit setStatus("cant send the data to client");
+        if (rTSock->waitForReadyRead(READ_TIMEOUT)) {
+            memset(buff, 0, 1024);
+            sz = rTSock->read(buff, BUFF_SZ);
+            if (sz > 0) {
+                lTSock->write(buff, sz);
+                qDebug() << "<< " << buff << endl;
+                rTSock->flush();
+            }
         }
-
-        //std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
-    free(buff);
 
-    delete rSock;
-    delete lSock;*/
+    //rTSock->blockSignals(true);
+    //lTSock->blockSignals(true);
+
+    isRunning = false;
+    rTSock->close();
+    lTSock->close();
+    lTServer->close();
+
+    delete rTSock;
+    delete lTSock;
+    delete lTServer;
+
+
+    memset(buff, 0, BUFF_SZ);
+    free(buff);
 
     emit sigDisconnected();
 }
 
+// SLOTS
+
+void Proxy::onNewTcpConnection() {
+    if (isRunning) {
+        emit setStatus("error: new clients trying to connect");
+        return;
+    }
+
+
+    lTSock = lTServer->nextPendingConnection();
+    connect(lTSock, SIGNAL(disconnected()), this, SLOT(onTcpLocalDisconnected()));
+    connect(lTSock, SIGNAL(readyRead()), this, SLOT(onReadTcpLocal()));
+
+
+    isRunning = true;
+    emit sigLConnected();
+}
+
+void Proxy::onTcpLocalDisconnected() {
+    stop();
+}
+
+void Proxy::onTcpRemoteDisconnected() {
+    stop();
+}
+
+void Proxy::onReadTcpLocal() {
+
+        // usar QByteArray array = server_socket.read(erver_socket.bytesAvailable());
+
+    QByteArray buff;
+    buff.clear();
+
+    if (!isRunning)
+        return;
+
+    buff = lTSock->readAll();
+    if (buff.size()>0)
+        rTSock->write(buff.constData(), buff.size());
+
+}
+
+void Proxy::onReadTcpRemote() {
+    QByteArray buff;
+    buff.clear();
+
+    if (!isRunning)
+        return;
+
+    buff = rTSock->readAll();
+    if (buff.size() > 0)
+        lTSock->write(buff.constData(), buff.size());
+
+
+}

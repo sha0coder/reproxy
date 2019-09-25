@@ -3,8 +3,12 @@
 
 #include <QThread>
 #include <QObject>
+#include <QtCore>
+#include <QtNetwork>
+
+/*
 #include <thread>
-#include <chrono>
+#include <chrono>*/
 
 #include "rsocket.h"
 
@@ -12,19 +16,24 @@ class Proxy : public QThread
 {
     Q_OBJECT
 private:
-    int CONNECTION_TIMEOUT = 5;
-    int READWRITE_TIMEOUT = 5;
+    const int CONNECTION_TIMEOUT = 5*1000;
+    const int READWRITE_TIMEOUT = 5*1000;
+    const int LISTEN_TIMEOUT = 60*1000;
+    const int READ_TIMEOUT = 10;
+    const int BUFF_SZ = 1024;
+    char *buff;
     int lPort;
     int rPort;
     bool isUDP;
     bool isOk;
     bool isRunning;
     QString rHost;
-    RSocket *rSock;
-    RSocket *lSock;
+    QTcpSocket *rTSock;
+    QTcpServer *lTServer;
+    QTcpSocket *lTSock;
 
 public:
-    explicit RProxy(QObject *parent = 0);
+    explicit Proxy(QObject *parent = 0);
     void run(void);
     void stop(void);
     bool running(void);
@@ -45,6 +54,11 @@ signals:
     void sigConnecting();
 
 public slots:
+    void onNewTcpConnection();
+    void onTcpLocalDisconnected();
+    void onReadTcpLocal();
+    void onTcpRemoteDisconnected();
+    void onReadTcpRemote();
 };
 
 #endif // RPROXY_H

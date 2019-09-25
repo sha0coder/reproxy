@@ -50,17 +50,15 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../reproxy/main.cpp \
 		../reproxy/mainwindow.cpp \
-		../reproxy/proxy.cpp \
-		../reproxy/rproxy.cpp \
-		../reproxy/rsocket.cpp moc_mainwindow.cpp \
-		moc_rproxy.cpp
+		../reproxy/rsocket.cpp \
+		../reproxy/proxy.cpp moc_mainwindow.cpp \
+		moc_proxy.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
-		proxy.o \
-		rproxy.o \
 		rsocket.o \
+		proxy.o \
 		moc_mainwindow.o \
-		moc_rproxy.o
+		moc_proxy.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -124,13 +122,11 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		../reproxy/reproxy.pro ../reproxy/mainwindow.h \
-		../reproxy/proxy.h \
-		../reproxy/rproxy.h \
-		../reproxy/rsocket.h ../reproxy/main.cpp \
+		../reproxy/rsocket.h \
+		../reproxy/proxy.h ../reproxy/main.cpp \
 		../reproxy/mainwindow.cpp \
-		../reproxy/proxy.cpp \
-		../reproxy/rproxy.cpp \
-		../reproxy/rsocket.cpp
+		../reproxy/rsocket.cpp \
+		../reproxy/proxy.cpp
 QMAKE_TARGET  = reproxy
 DESTDIR       = 
 TARGET        = reproxy
@@ -291,8 +287,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../reproxy/mainwindow.h ../reproxy/proxy.h ../reproxy/rproxy.h ../reproxy/rsocket.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../reproxy/main.cpp ../reproxy/mainwindow.cpp ../reproxy/proxy.cpp ../reproxy/rproxy.cpp ../reproxy/rsocket.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../reproxy/mainwindow.h ../reproxy/rsocket.h ../reproxy/proxy.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../reproxy/main.cpp ../reproxy/mainwindow.cpp ../reproxy/rsocket.cpp ../reproxy/proxy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../reproxy/mainwindow.ui $(DISTDIR)/
 
 
@@ -319,19 +315,19 @@ benchmark: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_rproxy.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_proxy.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_rproxy.cpp
-moc_mainwindow.cpp: ../reproxy/rproxy.h \
+	-$(DEL_FILE) moc_mainwindow.cpp moc_proxy.cpp
+moc_mainwindow.cpp: ../reproxy/proxy.h \
 		../reproxy/rsocket.h \
 		../reproxy/mainwindow.h \
 		/usr/lib/x86_64-linux-gnu/qt5/bin/moc
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/ring3/src/reproxy/reproxy -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/6 -I/usr/include/x86_64-linux-gnu/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/x86_64-linux-gnu/6/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/6/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../reproxy/mainwindow.h -o moc_mainwindow.cpp
 
-moc_rproxy.cpp: ../reproxy/rsocket.h \
-		../reproxy/rproxy.h \
+moc_proxy.cpp: ../reproxy/rsocket.h \
+		../reproxy/proxy.h \
 		/usr/lib/x86_64-linux-gnu/qt5/bin/moc
-	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/ring3/src/reproxy/reproxy -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/6 -I/usr/include/x86_64-linux-gnu/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/x86_64-linux-gnu/6/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/6/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../reproxy/rproxy.h -o moc_rproxy.cpp
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/ring3/src/reproxy/reproxy -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/6 -I/usr/include/x86_64-linux-gnu/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/x86_64-linux-gnu/6/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/6/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../reproxy/proxy.h -o moc_proxy.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -353,35 +349,28 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 ####### Compile
 
 main.o: ../reproxy/main.cpp ../reproxy/mainwindow.h \
-		../reproxy/rproxy.h \
+		../reproxy/proxy.h \
 		../reproxy/rsocket.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../reproxy/main.cpp
 
 mainwindow.o: ../reproxy/mainwindow.cpp ../reproxy/mainwindow.h \
-		../reproxy/rproxy.h \
+		../reproxy/proxy.h \
 		../reproxy/rsocket.h \
 		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../reproxy/mainwindow.cpp
 
-proxy.o: ../reproxy/proxy.cpp ../reproxy/proxy.h \
-		ui_mainwindow.h \
-		../reproxy/mainwindow.h \
-		../reproxy/rproxy.h \
-		../reproxy/rsocket.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o proxy.o ../reproxy/proxy.cpp
-
-rproxy.o: ../reproxy/rproxy.cpp ../reproxy/rproxy.h \
-		../reproxy/rsocket.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o rproxy.o ../reproxy/rproxy.cpp
-
 rsocket.o: ../reproxy/rsocket.cpp ../reproxy/rsocket.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o rsocket.o ../reproxy/rsocket.cpp
+
+proxy.o: ../reproxy/proxy.cpp ../reproxy/proxy.h \
+		../reproxy/rsocket.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o proxy.o ../reproxy/proxy.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
 
-moc_rproxy.o: moc_rproxy.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_rproxy.o moc_rproxy.cpp
+moc_proxy.o: moc_proxy.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_proxy.o moc_proxy.cpp
 
 ####### Install
 

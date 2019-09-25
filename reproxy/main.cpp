@@ -10,8 +10,6 @@ int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
     MainWindow win;
 
-    //QObject::connect(proxy, SIGNAL(onSignal()), &win, SLOT(testSignal()));
-
 /*
     Socket *sock = new Socket(true, 6);
     sock->dial("google.com", 80);

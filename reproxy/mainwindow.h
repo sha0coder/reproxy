@@ -44,7 +44,7 @@ private slots:
 
 private:
     bool silent;
-    RProxy *proxy;
+    Proxy *proxy;
     bool isReadyForSend;
 
     void enableSettings();
