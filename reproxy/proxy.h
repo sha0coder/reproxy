@@ -52,6 +52,9 @@ signals:
     void sigLConnected();
     void sigCantConnect(QString errmsg);
     void sigConnecting();
+    void sigEndpiontData(char *buff, qint64 sz);
+    void sigClientData(char *buff, qint64 sz);
+
 
 public slots:
     void onNewTcpConnection();

@@ -17,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
     connect(proxy, SIGNAL(sigDisconnected()), this, SLOT(statDisconnected()));
     connect(proxy, SIGNAL(sigCantConnect(QString)), this, SLOT(statCantConnect(QString)));
     connect(proxy, SIGNAL(sigConnecting()), this, SLOT(statConnecting()));
+    connect(proxy, SIGNAL(sigClientData(char*,qint64)), this, SLOT(onClientData(char*,qint64));
+    connect(proxy, SIGNAL(sigEndpiontData(char*,qint64)), this, SLOT(onEndpointData(char*,qint64));
 
     QStringList titles;
     titles << "0" << "1" << "2" << "3" << "4" << "5" << "6" << "7" << "8" << "9" << "A" << "B" << "C" << "D" << "E" << "F" << "Data";
@@ -110,6 +112,14 @@ void MainWindow::statConnecting() {
     disableSettings();
     ui->lStatus->setText("Connecting ...");
     ui->bConnect->setEnabled(false);
+}
+
+void MainWindow::onEndpointData(char *buff, qint64 sz) {
+
+}
+
+void MainWindow::onClientData(char *buff, qint64 sz) {
+
 }
 
 // button Events

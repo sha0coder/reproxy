@@ -93,13 +93,13 @@ void Proxy::run() {
 
     qDebug() << "start the party" << endl;
     while (isRunning) {
-
-
         if (lTSock->waitForReadyRead(READ_TIMEOUT)) {
 
             memset(buff, 0, BUFF_SZ);
             sz = lTSock->read(buff, BUFF_SZ);
             if (sz > 0) {
+                emit sigClientData(buff, sz);
+
                 rTSock->write(buff, sz);
                 qDebug() << ">> " << buff << endl;
                 rTSock->flush();
@@ -110,6 +110,8 @@ void Proxy::run() {
             memset(buff, 0, 1024);
             sz = rTSock->read(buff, BUFF_SZ);
             if (sz > 0) {
+                emit sigEndpiontData(buff, sz);
+
                 lTSock->write(buff, sz);
                 qDebug() << "<< " << buff << endl;
                 rTSock->flush();

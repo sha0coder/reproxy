@@ -37,6 +37,8 @@ public slots:
     void statLConnected();
     void statDisconnected();
     void statCantConnect(QString errmsg);
+    void onEndpointData(char *buff, qint64 sz);
+    void onClientData(char *buff, qint64 sz);
 
 private slots:
     void on_bConnect_clicked();
