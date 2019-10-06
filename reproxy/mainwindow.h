@@ -26,9 +26,11 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     Ui::MainWindow *ui;
-    void clear();
+    void clearStats();
     void box(QString msg);
 
+signals:
+    void sigReadyToSend(int sz);
 
 public slots:
     void setStatusMessage(QString msg);
@@ -37,8 +39,8 @@ public slots:
     void statLConnected();
     void statDisconnected();
     void statCantConnect(QString errmsg);
-    void onEndpointData(char *buff, qint64 sz);
-    void onClientData(char *buff, qint64 sz);
+    void onEndpointData(char *buff, int sz);
+    void onClientData(char *buff, int sz);
 
 private slots:
     void on_bConnect_clicked();
@@ -51,7 +53,9 @@ private:
 
     void enableSettings();
     void disableSettings();
-
+    void putBuffer(char *buffer, int sz, bool bSend);
+    int getBuffer(char *buffer);
+    void resetHex();
 
 };
 

@@ -8,7 +8,7 @@ Proxy::Proxy(QObject *parent) : QThread(parent) {
     isRunning = false;
     isUDP = false;
     isOk = true;
-
+    mutReadyForSend.unlock();
 }
 
 void Proxy::stop() {
@@ -58,6 +58,7 @@ void Proxy::setTCP() {
 }
 
 
+
 // run
 
 void Proxy::run() {
@@ -85,36 +86,47 @@ void Proxy::run() {
     lTSock = lTServer->nextPendingConnection();
 
     buff = (char *)malloc(BUFF_SZ+1);
-    qint64 sz;
+
 
     isRunning = true;
     emit sigLConnected();
 
 
-    qDebug() << "start the party" << endl;
+    mutReadyForSend.unlock();
     while (isRunning) {
+
+
+        if (lTSock->state() != lTSock->ConnectedState || rTSock->state() != rTSock->ConnectedState) {
+            emit sigDisconnected();
+            return;
+        }
+
         if (lTSock->waitForReadyRead(READ_TIMEOUT)) {
 
             memset(buff, 0, BUFF_SZ);
             sz = lTSock->read(buff, BUFF_SZ);
             if (sz > 0) {
+                mutReadyForSend.lock();
                 emit sigClientData(buff, sz);
 
+                mutReadyForSend.lock(); // the window must unlock this
                 rTSock->write(buff, sz);
-                qDebug() << ">> " << buff << endl;
                 rTSock->flush();
+                mutReadyForSend.unlock();
             }
         }
 
         if (rTSock->waitForReadyRead(READ_TIMEOUT)) {
-            memset(buff, 0, 1024);
+            memset(buff, 0, BUFF_SZ);
             sz = rTSock->read(buff, BUFF_SZ);
             if (sz > 0) {
+                mutReadyForSend.lock();
                 emit sigEndpiontData(buff, sz);
 
+                mutReadyForSend.lock();
                 lTSock->write(buff, sz);
-                qDebug() << "<< " << buff << endl;
                 rTSock->flush();
+                mutReadyForSend.unlock();
             }
         }
     }
@@ -140,6 +152,11 @@ void Proxy::run() {
 }
 
 // SLOTS
+
+void Proxy::onReadyToSend(int sz) {
+    this->sz = sz;
+    mutReadyForSend.unlock();
+}
 
 void Proxy::onNewTcpConnection() {
     if (isRunning) {

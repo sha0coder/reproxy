@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QtCore>
 #include <QtNetwork>
+#include <QMutex>
 
 /*
 #include <thread>
@@ -22,6 +23,7 @@ private:
     const int READ_TIMEOUT = 10;
     const int BUFF_SZ = 1024;
     char *buff;
+    int sz;
     int lPort;
     int rPort;
     bool isUDP;
@@ -31,6 +33,7 @@ private:
     QTcpSocket *rTSock;
     QTcpServer *lTServer;
     QTcpSocket *lTSock;
+    QMutex mutReadyForSend;
 
 public:
     explicit Proxy(QObject *parent = 0);
@@ -45,6 +48,7 @@ public:
     void setUDP();
     void setTCP();
 
+
 signals:
     void setStatus(QString msg);
     void sigDisconnected();
@@ -52,8 +56,8 @@ signals:
     void sigLConnected();
     void sigCantConnect(QString errmsg);
     void sigConnecting();
-    void sigEndpiontData(char *buff, qint64 sz);
-    void sigClientData(char *buff, qint64 sz);
+    void sigEndpiontData(char *buff, int sz);
+    void sigClientData(char *buff, int sz);
 
 
 public slots:
@@ -62,6 +66,7 @@ public slots:
     void onReadTcpLocal();
     void onTcpRemoteDisconnected();
     void onReadTcpRemote();
+    void onReadyToSend(int);
 };
 
 #endif // RPROXY_H

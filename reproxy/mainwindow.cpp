@@ -17,27 +17,35 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
     connect(proxy, SIGNAL(sigDisconnected()), this, SLOT(statDisconnected()));
     connect(proxy, SIGNAL(sigCantConnect(QString)), this, SLOT(statCantConnect(QString)));
     connect(proxy, SIGNAL(sigConnecting()), this, SLOT(statConnecting()));
-    connect(proxy, SIGNAL(sigClientData(char*,qint64)), this, SLOT(onClientData(char*,qint64));
-    connect(proxy, SIGNAL(sigEndpiontData(char*,qint64)), this, SLOT(onEndpointData(char*,qint64));
+    connect(proxy, SIGNAL(sigClientData(char*,int)), this, SLOT(onClientData(char*,int)));
+    connect(proxy, SIGNAL(sigEndpiontData(char*,int)), this, SLOT(onEndpointData(char*,int)));
+    connect(this, SIGNAL(sigReadyToSend(int)), proxy, SLOT(onReadyToSend(int)));
 
-    QStringList titles;
-    titles << "0" << "1" << "2" << "3" << "4" << "5" << "6" << "7" << "8" << "9" << "A" << "B" << "C" << "D" << "E" << "F" << "Data";
-    ui->tHex->setColumnCount(17);
-    ui->tHex->setHorizontalHeaderLabels(titles);
-    for (int i=0; i<16; i++)
-        ui->tHex->setColumnWidth(i, 18);
-    ui->tHex->setColumnWidth(16, 350);
+    resetHex();
 
-    //ui->tHex->insertRow(0);
+    ui->eId->setDisabled(true);
+    ui->eIn->setDisabled(true);
+    ui->eOut->setDisabled(true);
 
-    clear();
+    clearStats();
 }
 
 MainWindow::~MainWindow() {
     delete ui;
 }
 
-void MainWindow::clear() {
+void MainWindow::resetHex() {
+    QStringList titles;
+    titles << "0" << "1" << "2" << "3" << "4" << "5" << "6" << "7" << "8" << "9" << "A" << "B" << "C" << "D" << "E" << "F" << "Data";
+    ui->tHex->setColumnCount(17);
+    ui->tHex->setHorizontalHeaderLabels(titles);
+    for (int i=0; i<16; i++)
+        ui->tHex->setColumnWidth(i, 30);
+    ui->tHex->setColumnWidth(16, 350);
+    //ui->tHex->insertRow(0);
+}
+
+void MainWindow::clearStats() {
     ui->eId->setText("0");
     ui->eIn->setText("0");
     ui->eOut->setText("0");
@@ -86,7 +94,10 @@ void MainWindow::statRConnected() {
 }
 
 void MainWindow::statLConnected() {
+    // totally connected!!
+
     disableSettings();
+    clearStats();
     ui->lStatus->setText("connected!");
     ui->bConnect->setText("Disconnect");
     ui->bConnect->setEnabled(true);
@@ -114,12 +125,54 @@ void MainWindow::statConnecting() {
     ui->bConnect->setEnabled(false);
 }
 
-void MainWindow::onEndpointData(char *buff, qint64 sz) {
-
+void MainWindow::onEndpointData(char *buff, int sz) {
+    ui->bSend->setText("<<< Send <<<");
+    putBuffer(buff, sz, false);
+    emit sigReadyToSend(sz);
 }
 
-void MainWindow::onClientData(char *buff, qint64 sz) {
+void MainWindow::onClientData(char *buff, int sz) {
+    ui->bSend->setText(">>> Send >>>");
+    putBuffer(buff, sz, true);
+    emit sigReadyToSend(sz);
+}
 
+// display and retrieve buffer
+
+void MainWindow::putBuffer(char *buffer, int sz, bool bSend) {
+    int row, col, i=0;
+    char hex[5];
+
+    ui->eSize->setText(QString::number(sz));
+    ui->eId->setText(QString::number(ui->eId->text().toInt()+1));
+    if (bSend) {
+        ui->eOut->setText(QString::number(ui->eOut->text().toInt()+1));
+    } else {
+        ui->eIn->setText(QString::number(ui->eIn->text().toInt()+1));
+    }
+
+    ui->tHex->clear();
+    while (ui->tHex->rowCount() > 0) {
+        row = ui->tHex->rowCount();
+        ui->tHex->removeRow(row-1);
+    }
+
+    while (i<sz) {
+
+        int row = ui->tHex->rowCount();
+        ui->tHex->insertRow(row);
+
+        for (col=0; col<16 && i+col<sz; col++) {
+            snprintf(hex, 3, "%.2x", buffer[i+col]);
+            ui->tHex->setItem(row, col, new QTableWidgetItem( QString(hex) ));
+        }
+
+        i += 16;
+    }
+}
+
+int MainWindow::getBuffer(char *buffer) {
+    return 0;
 }
 
 // button Events

@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_Proxy_t {
-    QByteArrayData data[15];
-    char stringdata0[198];
+    QByteArrayData data[21];
+    char stringdata0[256];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -39,18 +39,26 @@ QT_MOC_LITERAL(6, 51, 13), // "sigLConnected"
 QT_MOC_LITERAL(7, 65, 14), // "sigCantConnect"
 QT_MOC_LITERAL(8, 80, 6), // "errmsg"
 QT_MOC_LITERAL(9, 87, 13), // "sigConnecting"
-QT_MOC_LITERAL(10, 101, 18), // "onNewTcpConnection"
-QT_MOC_LITERAL(11, 120, 22), // "onTcpLocalDisconnected"
-QT_MOC_LITERAL(12, 143, 14), // "onReadTcpLocal"
-QT_MOC_LITERAL(13, 158, 23), // "onTcpRemoteDisconnected"
-QT_MOC_LITERAL(14, 182, 15) // "onReadTcpRemote"
+QT_MOC_LITERAL(10, 101, 15), // "sigEndpiontData"
+QT_MOC_LITERAL(11, 117, 5), // "char*"
+QT_MOC_LITERAL(12, 123, 4), // "buff"
+QT_MOC_LITERAL(13, 128, 2), // "sz"
+QT_MOC_LITERAL(14, 131, 13), // "sigClientData"
+QT_MOC_LITERAL(15, 145, 18), // "onNewTcpConnection"
+QT_MOC_LITERAL(16, 164, 22), // "onTcpLocalDisconnected"
+QT_MOC_LITERAL(17, 187, 14), // "onReadTcpLocal"
+QT_MOC_LITERAL(18, 202, 23), // "onTcpRemoteDisconnected"
+QT_MOC_LITERAL(19, 226, 15), // "onReadTcpRemote"
+QT_MOC_LITERAL(20, 242, 13) // "onReadyToSend"
 
     },
     "Proxy\0setStatus\0\0msg\0sigDisconnected\0"
     "sigRConnected\0sigLConnected\0sigCantConnect\0"
-    "errmsg\0sigConnecting\0onNewTcpConnection\0"
-    "onTcpLocalDisconnected\0onReadTcpLocal\0"
-    "onTcpRemoteDisconnected\0onReadTcpRemote"
+    "errmsg\0sigConnecting\0sigEndpiontData\0"
+    "char*\0buff\0sz\0sigClientData\0"
+    "onNewTcpConnection\0onTcpLocalDisconnected\0"
+    "onReadTcpLocal\0onTcpRemoteDisconnected\0"
+    "onReadTcpRemote\0onReadyToSend"
 };
 #undef QT_MOC_LITERAL
 
@@ -60,27 +68,30 @@ static const uint qt_meta_data_Proxy[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      11,   14, // methods
+      14,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       6,       // signalCount
+       8,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   69,    2, 0x06 /* Public */,
-       4,    0,   72,    2, 0x06 /* Public */,
-       5,    0,   73,    2, 0x06 /* Public */,
-       6,    0,   74,    2, 0x06 /* Public */,
-       7,    1,   75,    2, 0x06 /* Public */,
-       9,    0,   78,    2, 0x06 /* Public */,
+       1,    1,   84,    2, 0x06 /* Public */,
+       4,    0,   87,    2, 0x06 /* Public */,
+       5,    0,   88,    2, 0x06 /* Public */,
+       6,    0,   89,    2, 0x06 /* Public */,
+       7,    1,   90,    2, 0x06 /* Public */,
+       9,    0,   93,    2, 0x06 /* Public */,
+      10,    2,   94,    2, 0x06 /* Public */,
+      14,    2,   99,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      10,    0,   79,    2, 0x0a /* Public */,
-      11,    0,   80,    2, 0x0a /* Public */,
-      12,    0,   81,    2, 0x0a /* Public */,
-      13,    0,   82,    2, 0x0a /* Public */,
-      14,    0,   83,    2, 0x0a /* Public */,
+      15,    0,  104,    2, 0x0a /* Public */,
+      16,    0,  105,    2, 0x0a /* Public */,
+      17,    0,  106,    2, 0x0a /* Public */,
+      18,    0,  107,    2, 0x0a /* Public */,
+      19,    0,  108,    2, 0x0a /* Public */,
+      20,    1,  109,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString,    3,
@@ -89,6 +100,8 @@ static const uint qt_meta_data_Proxy[] = {
     QMetaType::Void,
     QMetaType::Void, QMetaType::QString,    8,
     QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 11, QMetaType::Int,   12,   13,
+    QMetaType::Void, 0x80000000 | 11, QMetaType::Int,   12,   13,
 
  // slots: parameters
     QMetaType::Void,
@@ -96,6 +109,7 @@ static const uint qt_meta_data_Proxy[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::Int,    2,
 
        0        // eod
 };
@@ -112,11 +126,14 @@ void Proxy::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
         case 3: _t->sigLConnected(); break;
         case 4: _t->sigCantConnect((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 5: _t->sigConnecting(); break;
-        case 6: _t->onNewTcpConnection(); break;
-        case 7: _t->onTcpLocalDisconnected(); break;
-        case 8: _t->onReadTcpLocal(); break;
-        case 9: _t->onTcpRemoteDisconnected(); break;
-        case 10: _t->onReadTcpRemote(); break;
+        case 6: _t->sigEndpiontData((*reinterpret_cast< char*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 7: _t->sigClientData((*reinterpret_cast< char*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 8: _t->onNewTcpConnection(); break;
+        case 9: _t->onTcpLocalDisconnected(); break;
+        case 10: _t->onReadTcpLocal(); break;
+        case 11: _t->onTcpRemoteDisconnected(); break;
+        case 12: _t->onReadTcpRemote(); break;
+        case 13: _t->onReadyToSend((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -164,6 +181,20 @@ void Proxy::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
                 return;
             }
         }
+        {
+            typedef void (Proxy::*_t)(char * , int );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&Proxy::sigEndpiontData)) {
+                *result = 6;
+                return;
+            }
+        }
+        {
+            typedef void (Proxy::*_t)(char * , int );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&Proxy::sigClientData)) {
+                *result = 7;
+                return;
+            }
+        }
     }
 }
 
@@ -192,13 +223,13 @@ int Proxy::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 11)
+        if (_id < 14)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 11;
+        _id -= 14;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 11)
+        if (_id < 14)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 11;
+        _id -= 14;
     }
     return _id;
 }
@@ -239,5 +270,19 @@ void Proxy::sigCantConnect(QString _t1)
 void Proxy::sigConnecting()
 {
     QMetaObject::activate(this, &staticMetaObject, 5, Q_NULLPTR);
+}
+
+// SIGNAL 6
+void Proxy::sigEndpiontData(char * _t1, int _t2)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
+    QMetaObject::activate(this, &staticMetaObject, 6, _a);
+}
+
+// SIGNAL 7
+void Proxy::sigClientData(char * _t1, int _t2)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
+    QMetaObject::activate(this, &staticMetaObject, 7, _a);
 }
 QT_END_MOC_NAMESPACE
