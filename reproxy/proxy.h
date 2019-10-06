@@ -37,7 +37,9 @@ private:
 
 public:
     explicit Proxy(QObject *parent = 0);
+
     void run(void);
+    void closeConnections(void);
     void stop(void);
     bool running(void);
     bool ok();

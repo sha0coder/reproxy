@@ -32,6 +32,14 @@ QT_BEGIN_NAMESPACE
 class Ui_MainWindow
 {
 public:
+    QAction *actionLoad_Hex;
+    QAction *actionLoad_Bin;
+    QAction *actionSave_Hex;
+    QAction *actionSave_Bin;
+    QAction *actionQuit;
+    QAction *actionManual;
+    QAction *actionAbout;
+    QAction *actionAbout_2;
     QWidget *centralWidget;
     QLineEdit *eLPort;
     QLineEdit *eRHost;
@@ -73,6 +81,22 @@ public:
         MainWindow->resize(682, 600);
         MainWindow->setMinimumSize(QSize(682, 600));
         MainWindow->setMaximumSize(QSize(682, 600));
+        actionLoad_Hex = new QAction(MainWindow);
+        actionLoad_Hex->setObjectName(QStringLiteral("actionLoad_Hex"));
+        actionLoad_Bin = new QAction(MainWindow);
+        actionLoad_Bin->setObjectName(QStringLiteral("actionLoad_Bin"));
+        actionSave_Hex = new QAction(MainWindow);
+        actionSave_Hex->setObjectName(QStringLiteral("actionSave_Hex"));
+        actionSave_Bin = new QAction(MainWindow);
+        actionSave_Bin->setObjectName(QStringLiteral("actionSave_Bin"));
+        actionQuit = new QAction(MainWindow);
+        actionQuit->setObjectName(QStringLiteral("actionQuit"));
+        actionManual = new QAction(MainWindow);
+        actionManual->setObjectName(QStringLiteral("actionManual"));
+        actionAbout = new QAction(MainWindow);
+        actionAbout->setObjectName(QStringLiteral("actionAbout"));
+        actionAbout_2 = new QAction(MainWindow);
+        actionAbout_2->setObjectName(QStringLiteral("actionAbout_2"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         eLPort = new QLineEdit(centralWidget);
@@ -110,6 +134,7 @@ public:
         checkBox = new QCheckBox(centralWidget);
         checkBox->setObjectName(QStringLiteral("checkBox"));
         checkBox->setGeometry(QRect(10, 70, 82, 23));
+        checkBox->setChecked(true);
         bSend = new QPushButton(centralWidget);
         bSend->setObjectName(QStringLiteral("bSend"));
         bSend->setGeometry(QRect(120, 60, 471, 31));
@@ -199,6 +224,15 @@ public:
         menuBar->addAction(menuScripts->menuAction());
         menuBar->addAction(menuTools_2->menuAction());
         menuBar->addAction(menuHelp->menuAction());
+        menuFile->addAction(actionLoad_Hex);
+        menuFile->addAction(actionLoad_Bin);
+        menuFile->addAction(actionSave_Hex);
+        menuFile->addAction(actionSave_Bin);
+        menuFile->addSeparator();
+        menuFile->addAction(actionQuit);
+        menuHelp->addAction(actionManual);
+        menuHelp->addSeparator();
+        menuHelp->addAction(actionAbout_2);
 
         retranslateUi(MainWindow);
 
@@ -208,6 +242,14 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "rproxy - multi protocol reversing proxy", Q_NULLPTR));
+        actionLoad_Hex->setText(QApplication::translate("MainWindow", "Load Hex", Q_NULLPTR));
+        actionLoad_Bin->setText(QApplication::translate("MainWindow", "Load  Bin", Q_NULLPTR));
+        actionSave_Hex->setText(QApplication::translate("MainWindow", "Save Hex", Q_NULLPTR));
+        actionSave_Bin->setText(QApplication::translate("MainWindow", "Save Bin", Q_NULLPTR));
+        actionQuit->setText(QApplication::translate("MainWindow", "Quit", Q_NULLPTR));
+        actionManual->setText(QApplication::translate("MainWindow", "Manual", Q_NULLPTR));
+        actionAbout->setText(QApplication::translate("MainWindow", "About", Q_NULLPTR));
+        actionAbout_2->setText(QApplication::translate("MainWindow", "About", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         eLPort->setToolTip(QApplication::translate("MainWindow", "local port number to open for receiving connections from the client.", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP

@@ -15,6 +15,25 @@ void Proxy::stop() {
     isRunning = false;
 }
 
+void Proxy::closeConnections() {
+    // only call this when the engine already exited the loop, or on the Quit menu.
+
+    if (!isRunning)
+        return;
+
+    isRunning = false;
+    rTSock->close();
+    lTSock->close();
+    lTServer->close();
+
+    delete rTSock;
+    delete lTSock;
+    delete lTServer;
+
+    memset(buff, 0, BUFF_SZ);
+    free(buff);
+}
+
 bool Proxy::running() {
     return isRunning;
 }
@@ -135,18 +154,7 @@ void Proxy::run() {
     //rTSock->blockSignals(true);
     //lTSock->blockSignals(true);
 
-    isRunning = false;
-    rTSock->close();
-    lTSock->close();
-    lTServer->close();
-
-    delete rTSock;
-    delete lTSock;
-    delete lTServer;
-
-
-    memset(buff, 0, BUFF_SZ);
-    free(buff);
+    closeConnections();
 
     emit sigDisconnected();
 }

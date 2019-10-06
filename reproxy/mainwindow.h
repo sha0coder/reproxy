@@ -46,6 +46,8 @@ private slots:
     void on_bConnect_clicked();
     void on_bSend_clicked();
 
+    void on_actionQuit_triggered();
+
 private:
     bool silent;
     Proxy *proxy;

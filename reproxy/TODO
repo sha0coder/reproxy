@@ -1,0 +1,20 @@
+When the proxy is half disconnected, disconnect it totally
+don't disable the connect button while is connecting to allow user to disconnect totally
+implement edition:
+	- autosend checked by default
+	- edit events
+	- update data when hex is modified
+	- update hex when data is modified
+	- 
+
+
+
+
+Menus
+	- File
+		- load hex
+		- load bin
+		- save hex
+		- save bin
+		- quit
+

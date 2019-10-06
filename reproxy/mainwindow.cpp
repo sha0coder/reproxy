@@ -144,7 +144,6 @@ void MainWindow::putBuffer(char *buffer, int sz, bool bSend) {
     int row, col, i=0;
     char hex[5];
 
-
     ui->eSize->setText(QString::number(sz));
     ui->eId->setText(QString::number(ui->eId->text().toInt()+1));
     if (bSend) {
@@ -168,7 +167,10 @@ void MainWindow::putBuffer(char *buffer, int sz, bool bSend) {
         for (col=0; col<16 && i+col<sz; col++) {
             snprintf(hex, 3, "%.2x", buffer[i+col]);
             ui->tHex->setItem(row, col, new QTableWidgetItem( QString(hex) ));
-            data += QString::fromUtf8(&buffer[i+col], 1);
+            if (buffer[i+col] >= ' ' && buffer[i+col] <= '~')
+                data += QString::fromUtf8(&buffer[i+col], 1);
+            else
+                data += "?";
         }
         ui->tHex->setItem(row, 16,  new QTableWidgetItem( data ));
 
@@ -214,3 +216,9 @@ void MainWindow::on_bSend_clicked() {
         isReadyForSend = true;
 }
 
+
+void MainWindow::on_actionQuit_triggered() {
+    proxy->closeConnections();
+    delete proxy;
+    exit(1);
+}
