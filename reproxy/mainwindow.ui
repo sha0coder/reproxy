@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>662</width>
+    <width>682</width>
     <height>600</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>662</width>
+    <width>682</width>
     <height>600</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>662</width>
+    <width>682</width>
     <height>600</height>
    </size>
   </property>
@@ -31,7 +31,7 @@
      <rect>
       <x>10</x>
       <y>30</y>
-      <width>61</width>
+      <width>71</width>
       <height>25</height>
      </rect>
     </property>
@@ -48,7 +48,7 @@
    <widget class="QLineEdit" name="eRHost">
     <property name="geometry">
      <rect>
-      <x>80</x>
+      <x>90</x>
       <y>30</y>
       <width>251</width>
       <height>25</height>
@@ -61,7 +61,7 @@
    <widget class="QPushButton" name="bConnect">
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>430</x>
       <y>20</y>
       <width>161</width>
       <height>41</height>
@@ -100,7 +100,7 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>330</x>
+      <x>350</x>
       <y>10</y>
       <width>72</width>
       <height>17</height>
@@ -113,9 +113,9 @@
    <widget class="QLineEdit" name="eRPort">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>350</x>
       <y>30</y>
-      <width>61</width>
+      <width>71</width>
       <height>25</height>
      </rect>
     </property>
@@ -126,7 +126,7 @@
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>580</x>
+      <x>600</x>
       <y>0</y>
       <width>71</width>
       <height>91</height>
@@ -181,7 +181,7 @@
    <widget class="QPushButton" name="bSend">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>120</x>
       <y>60</y>
       <width>471</width>
       <height>31</height>
@@ -361,7 +361,7 @@
      <rect>
       <x>5</x>
       <y>101</y>
-      <width>651</width>
+      <width>671</width>
       <height>401</height>
      </rect>
     </property>
@@ -373,10 +373,11 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>7</pointsize>
-      <weight>75</weight>
-      <italic>true</italic>
-      <bold>true</bold>
+      <family>Unifont</family>
+      <pointsize>11</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
      </font>
     </property>
    </widget>
@@ -386,7 +387,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>662</width>
+     <width>682</width>
      <height>22</height>
     </rect>
    </property>

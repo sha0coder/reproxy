@@ -37,11 +37,12 @@ MainWindow::~MainWindow() {
 void MainWindow::resetHex() {
     QStringList titles;
     titles << "0" << "1" << "2" << "3" << "4" << "5" << "6" << "7" << "8" << "9" << "A" << "B" << "C" << "D" << "E" << "F" << "Data";
+    ui->tHex->clear();
     ui->tHex->setColumnCount(17);
     ui->tHex->setHorizontalHeaderLabels(titles);
     for (int i=0; i<16; i++)
-        ui->tHex->setColumnWidth(i, 30);
-    ui->tHex->setColumnWidth(16, 350);
+        ui->tHex->setColumnWidth(i, 25);
+    ui->tHex->setColumnWidth(16, 250);
     //ui->tHex->insertRow(0);
 }
 
@@ -143,6 +144,7 @@ void MainWindow::putBuffer(char *buffer, int sz, bool bSend) {
     int row, col, i=0;
     char hex[5];
 
+
     ui->eSize->setText(QString::number(sz));
     ui->eId->setText(QString::number(ui->eId->text().toInt()+1));
     if (bSend) {
@@ -151,7 +153,7 @@ void MainWindow::putBuffer(char *buffer, int sz, bool bSend) {
         ui->eIn->setText(QString::number(ui->eIn->text().toInt()+1));
     }
 
-    ui->tHex->clear();
+    //ui->tHex->clear();
     while (ui->tHex->rowCount() > 0) {
         row = ui->tHex->rowCount();
         ui->tHex->removeRow(row-1);
@@ -162,10 +164,13 @@ void MainWindow::putBuffer(char *buffer, int sz, bool bSend) {
         int row = ui->tHex->rowCount();
         ui->tHex->insertRow(row);
 
+        QString data;
         for (col=0; col<16 && i+col<sz; col++) {
             snprintf(hex, 3, "%.2x", buffer[i+col]);
             ui->tHex->setItem(row, col, new QTableWidgetItem( QString(hex) ));
+            data += QString::fromUtf8(&buffer[i+col], 1);
         }
+        ui->tHex->setItem(row, 16,  new QTableWidgetItem( data ));
 
         i += 16;
     }
