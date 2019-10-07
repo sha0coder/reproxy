@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
     connect(proxy, SIGNAL(sigClientData(char*,int)), this, SLOT(onClientData(char*,int)));
     connect(proxy, SIGNAL(sigEndpiontData(char*,int)), this, SLOT(onEndpointData(char*,int)));
     connect(this, SIGNAL(sigReadyToSend(int)), proxy, SLOT(onReadyToSend(int)));
+    //connect(ui->tHex, SIGNAL(cellChanged(int,int)), this, SLOT(on_hexChanged(int,int)));
 
     resetHex();
 
@@ -81,6 +82,25 @@ void MainWindow::box(QString msg) {
 }
 
 // slots
+
+void MainWindow::on_hexChanged(int row, int col) {
+    bool ok;
+    QString hex, data;
+
+    if (col < 16) {
+        hex = ui->tHex->item(row,col)->text();
+        hex.toInt(&ok, 16);
+        if (!ok) {
+            this->box("wrong hexadecimal value");
+            return;
+        }
+
+        data = ui->tHex->item(row,16)->text();
+        data[col] = 'Z';
+
+        ui->tHex->setItem(row,16, new QTableWidgetItem(data));
+    }
+}
 
 void MainWindow::setStatusMessage(QString msg) {
     this->ui->lStatus->setText(msg);
@@ -144,6 +164,8 @@ void MainWindow::putBuffer(char *buffer, int sz, bool bSend) {
     int row, col, i=0;
     char hex[5];
 
+    disconnect(ui->tHex, SIGNAL(cellChanged(int,int)));
+
     ui->eSize->setText(QString::number(sz));
     ui->eId->setText(QString::number(ui->eId->text().toInt()+1));
     if (bSend) {
@@ -152,14 +174,13 @@ void MainWindow::putBuffer(char *buffer, int sz, bool bSend) {
         ui->eIn->setText(QString::number(ui->eIn->text().toInt()+1));
     }
 
-    //ui->tHex->clear();
+    // ui->tHex->clear();
     while (ui->tHex->rowCount() > 0) {
         row = ui->tHex->rowCount();
         ui->tHex->removeRow(row-1);
     }
 
     while (i<sz) {
-
         int row = ui->tHex->rowCount();
         ui->tHex->insertRow(row);
 
@@ -176,6 +197,8 @@ void MainWindow::putBuffer(char *buffer, int sz, bool bSend) {
 
         i += 16;
     }
+
+    connect(ui->tHex, SIGNAL(cellChanged(int,int)), this, SLOT(on_hexChanged(int,int)));
 }
 
 int MainWindow::getBuffer(char *buffer) {
@@ -185,7 +208,6 @@ int MainWindow::getBuffer(char *buffer) {
 // button Events
 
 void MainWindow::on_bConnect_clicked() {
-
     if (!proxy->running()) {
 
         // Connect
@@ -215,7 +237,6 @@ void MainWindow::on_bSend_clicked() {
     if (proxy->running())
         isReadyForSend = true;
 }
-
 
 void MainWindow::on_actionQuit_triggered() {
     proxy->closeConnections();

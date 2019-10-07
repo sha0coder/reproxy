@@ -41,12 +41,13 @@ public slots:
     void statCantConnect(QString errmsg);
     void onEndpointData(char *buff, int sz);
     void onClientData(char *buff, int sz);
+    void on_hexChanged(int row, int col);
 
 private slots:
     void on_bConnect_clicked();
     void on_bSend_clicked();
-
     void on_actionQuit_triggered();
+
 
 private:
     bool silent;
