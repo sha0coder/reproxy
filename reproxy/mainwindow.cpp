@@ -20,13 +20,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
     connect(proxy, SIGNAL(sigClientData(char*,int)), this, SLOT(onClientData(char*,int)));
     connect(proxy, SIGNAL(sigEndpiontData(char*,int)), this, SLOT(onEndpointData(char*,int)));
     connect(this, SIGNAL(sigReadyToSend(int)), proxy, SLOT(onReadyToSend(int)));
-    //connect(ui->tHex, SIGNAL(cellChanged(int,int)), this, SLOT(on_hexChanged(int,int)));
+    connect(ui->tHex, SIGNAL(cellChanged(int,int)), this, SLOT(on_hexChanged(int,int)));
 
     resetHex();
 
     ui->eId->setDisabled(true);
     ui->eIn->setDisabled(true);
     ui->eOut->setDisabled(true);
+
 
     clearStats();
 }
@@ -85,20 +86,49 @@ void MainWindow::box(QString msg) {
 
 void MainWindow::on_hexChanged(int row, int col) {
     bool ok;
+    QChar *bytes;
     QString hex, data;
+    unsigned int h;
 
-    if (col < 16) {
-        hex = ui->tHex->item(row,col)->text();
-        hex.toInt(&ok, 16);
-        if (!ok) {
-            this->box("wrong hexadecimal value");
-            return;
+    if (mutHex.tryLock()) {
+
+        if (col < 16) {
+            // user modified an hex box
+            hex = ui->tHex->item(row,col)->text();
+            h = hex.toInt(&ok, 16);
+            if (!ok) {
+                this->box("wrong hexadecimal value");
+                ui->tHex->setItem(row, col, new QTableWidgetItem(QString("ff")));
+                h = 0xff;
+            }
+
+            data = ui->tHex->item(row,16)->text();
+
+            if (h > 0xff) {
+                h = 0xff;
+                ui->tHex->setItem(row, col, new QTableWidgetItem(QString("ff")));
+            }
+
+            bytes = data.data();
+            if (h>=' ' && h<= '~')
+                bytes[col] = (QChar)h;
+            else
+                bytes[col] = (QChar)'?';
+
+            ui->tHex->setItem(row,16, new QTableWidgetItem(QString(bytes)));
+
+        } else if (col == 16) {
+            // user modified the string data box
+            data = ui->tHex->item(row,col)->text();
+            bytes = data.data();
+            /*TODO: refesh hex boxes
+            for (int i=0; i<data.size(); i++) {
+                ui->tHex->setItem(row, i, new QTableWidgetItem(QString("ff")));
+            }*/
+
         }
 
-        data = ui->tHex->item(row,16)->text();
-        data[col] = 'Z';
-
-        ui->tHex->setItem(row,16, new QTableWidgetItem(data));
+        mutHex.unlock();
     }
 }
 
@@ -164,7 +194,9 @@ void MainWindow::putBuffer(char *buffer, int sz, bool bSend) {
     int row, col, i=0;
     char hex[5];
 
-    disconnect(ui->tHex, SIGNAL(cellChanged(int,int)));
+    //disconnect(ui->tHex, SIGNAL(cellChanged(int,int)));
+
+    mutHex.lock();
 
     ui->eSize->setText(QString::number(sz));
     ui->eId->setText(QString::number(ui->eId->text().toInt()+1));
@@ -198,7 +230,7 @@ void MainWindow::putBuffer(char *buffer, int sz, bool bSend) {
         i += 16;
     }
 
-    connect(ui->tHex, SIGNAL(cellChanged(int,int)), this, SLOT(on_hexChanged(int,int)));
+    mutHex.unlock();
 }
 
 int MainWindow::getBuffer(char *buffer) {

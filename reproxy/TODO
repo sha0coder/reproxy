@@ -1,11 +1,12 @@
 When the proxy is half disconnected, disconnect it totally
 don't disable the connect button while is connecting to allow user to disconnect totally
 implement edition:
+	- clean hex on disconnect
 	- autosend checked by default
 	- edit events
 	- update data when hex is modified
 	- update hex when data is modified
-	- 
+	- two instences of reproxy segfaults because the listening socket
 
 
 

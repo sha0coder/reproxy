@@ -53,6 +53,7 @@ private:
     bool silent;
     Proxy *proxy;
     bool isReadyForSend;
+    QMutex mutHex;
 
     void enableSettings();
     void disableSettings();
