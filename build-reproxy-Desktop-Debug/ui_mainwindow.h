@@ -51,7 +51,7 @@ public:
     QGroupBox *groupBox;
     QRadioButton *rTCP;
     QRadioButton *rUDP;
-    QCheckBox *checkBox;
+    QCheckBox *chkAutoSend;
     QPushButton *bSend;
     QLabel *label_4;
     QLineEdit *eIn;
@@ -131,10 +131,11 @@ public:
         rUDP = new QRadioButton(groupBox);
         rUDP->setObjectName(QStringLiteral("rUDP"));
         rUDP->setGeometry(QRect(10, 60, 61, 23));
-        checkBox = new QCheckBox(centralWidget);
-        checkBox->setObjectName(QStringLiteral("checkBox"));
-        checkBox->setGeometry(QRect(10, 70, 82, 23));
-        checkBox->setChecked(true);
+        chkAutoSend = new QCheckBox(centralWidget);
+        chkAutoSend->setObjectName(QStringLiteral("chkAutoSend"));
+        chkAutoSend->setEnabled(true);
+        chkAutoSend->setGeometry(QRect(10, 70, 82, 23));
+        chkAutoSend->setChecked(false);
         bSend = new QPushButton(centralWidget);
         bSend->setObjectName(QStringLiteral("bSend"));
         bSend->setGeometry(QRect(120, 60, 471, 31));
@@ -211,8 +212,8 @@ public:
         QWidget::setTabOrder(eRPort, bConnect);
         QWidget::setTabOrder(bConnect, rTCP);
         QWidget::setTabOrder(rTCP, rUDP);
-        QWidget::setTabOrder(rUDP, checkBox);
-        QWidget::setTabOrder(checkBox, bSend);
+        QWidget::setTabOrder(rUDP, chkAutoSend);
+        QWidget::setTabOrder(chkAutoSend, bSend);
         QWidget::setTabOrder(bSend, eIn);
         QWidget::setTabOrder(eIn, eOut);
         QWidget::setTabOrder(eOut, eSize);
@@ -263,7 +264,7 @@ public:
         groupBox->setTitle(QApplication::translate("MainWindow", "Protocol:", Q_NULLPTR));
         rTCP->setText(QApplication::translate("MainWindow", "TCP", Q_NULLPTR));
         rUDP->setText(QApplication::translate("MainWindow", "UDP", Q_NULLPTR));
-        checkBox->setText(QApplication::translate("MainWindow", "Auto send", Q_NULLPTR));
+        chkAutoSend->setText(QApplication::translate("MainWindow", "Auto send", Q_NULLPTR));
         bSend->setText(QApplication::translate("MainWindow", ">>> Send >>>", Q_NULLPTR));
         label_4->setText(QApplication::translate("MainWindow", "IN:", Q_NULLPTR));
         eIn->setText(QApplication::translate("MainWindow", "0", Q_NULLPTR));

@@ -49,6 +49,7 @@ public:
     void setRHost(QString rhost);
     void setUDP();
     void setTCP();
+    char *getBufferPtr();
 
 
 signals:

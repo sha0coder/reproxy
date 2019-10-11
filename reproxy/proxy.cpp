@@ -76,7 +76,9 @@ void Proxy::setTCP() {
     isUDP = false;
 }
 
-
+char *Proxy::getBufferPtr() {
+    return this->buff;
+}
 
 // run
 
@@ -113,7 +115,6 @@ void Proxy::run() {
 
     mutReadyForSend.unlock();
     while (isRunning) {
-
 
         if (lTSock->state() != lTSock->ConnectedState || rTSock->state() != rTSock->ConnectedState) {
             emit sigDisconnected();

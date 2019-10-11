@@ -165,7 +165,10 @@
      </property>
     </widget>
    </widget>
-   <widget class="QCheckBox" name="checkBox">
+   <widget class="QCheckBox" name="chkAutoSend">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -178,7 +181,7 @@
      <string>Auto send</string>
     </property>
     <property name="checked">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QPushButton" name="bSend">
@@ -491,7 +494,7 @@
   <tabstop>bConnect</tabstop>
   <tabstop>rTCP</tabstop>
   <tabstop>rUDP</tabstop>
-  <tabstop>checkBox</tabstop>
+  <tabstop>chkAutoSend</tabstop>
   <tabstop>bSend</tabstop>
   <tabstop>eIn</tabstop>
   <tabstop>eOut</tabstop>

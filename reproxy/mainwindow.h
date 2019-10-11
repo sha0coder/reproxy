@@ -39,15 +39,14 @@ public slots:
     void statLConnected();
     void statDisconnected();
     void statCantConnect(QString errmsg);
-    void onEndpointData(char *buff, int sz);
-    void onClientData(char *buff, int sz);
+    void onEndpointData(char *buff, int sz);        // data comming from server
+    void onClientData(char *buff, int sz);          // data comming from client
     void on_hexChanged(int row, int col);
 
 private slots:
     void on_bConnect_clicked();
     void on_bSend_clicked();
-    void on_actionQuit_triggered();
-
+    void on_actionQuit_triggered();                 // Menu > file > quit
 
 private:
     bool silent;
@@ -57,8 +56,10 @@ private:
 
     void enableSettings();
     void disableSettings();
-    void putBuffer(char *buffer, int sz, bool bSend);
-    int getBuffer(char *buffer);
+
+    void putBuffer(char *buffer, int sz, bool bSend);   // this reads buffer pointer and writes the hex bytes on the screen
+    int getBuffer(char *buffer);                        // this gets the hex from the screen and write them on the buffer pointer (sz: 1024)
+
     void resetHex();
 
 };

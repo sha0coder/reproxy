@@ -7,7 +7,7 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainWindow) {
     ui->setupUi(this);
     silent = false;
-    isReadyForSend = false;
+    //isReadyForSend = false;
     ui->lStatus->setText("Disconnected.");
 
     proxy = new Proxy(this);
@@ -115,16 +115,21 @@ void MainWindow::on_hexChanged(int row, int col) {
             else
                 bytes[col] = (QChar)'?';
 
-            ui->tHex->setItem(row,16, new QTableWidgetItem(QString(bytes)));
+            ui->tHex->setItem(row, 16, new QTableWidgetItem(QString(bytes)));
 
         } else if (col == 16) {
             // user modified the string data box
             data = ui->tHex->item(row,col)->text();
             bytes = data.data();
-            /*TODO: refesh hex boxes
+
+
+            char tmp[4];
             for (int i=0; i<data.size(); i++) {
-                ui->tHex->setItem(row, i, new QTableWidgetItem(QString("ff")));
-            }*/
+                if (bytes[i] != '?') {
+                    snprintf(tmp, 3, "%.2x", bytes[i]);
+                    ui->tHex->setItem(row, i, new QTableWidgetItem(QString::fromUtf8(tmp, 2)));
+                }
+            }
 
         }
 
@@ -179,13 +184,15 @@ void MainWindow::statConnecting() {
 void MainWindow::onEndpointData(char *buff, int sz) {
     ui->bSend->setText("<<< Send <<<");
     putBuffer(buff, sz, false);
-    emit sigReadyToSend(sz);
+    if (ui->chkAutoSend->isChecked())
+        emit sigReadyToSend(sz);
 }
 
 void MainWindow::onClientData(char *buff, int sz) {
     ui->bSend->setText(">>> Send >>>");
     putBuffer(buff, sz, true);
-    emit sigReadyToSend(sz);
+    if (ui->chkAutoSend->isChecked())
+        emit sigReadyToSend(sz);
 }
 
 // display and retrieve buffer
@@ -234,7 +241,39 @@ void MainWindow::putBuffer(char *buffer, int sz, bool bSend) {
 }
 
 int MainWindow::getBuffer(char *buffer) {
-    return 0;
+    bool ok;
+    int i, sz, col, row, hex;
+
+    sz = ui->eSize->text().toInt(&ok, 10);
+    if (!ok || sz <0 || sz>1024) {
+        this->box("bad size");
+        return 0;
+    }
+
+    col = 0;
+    row = 0;
+    for (i=0; i<sz; i++) {
+
+        hex = ui->tHex->item(row, col)->text().toInt(&ok, 16);
+        if (!ok) {
+            // should not enter here because the cell update is already validated
+            this->box("wrong byte, check  getBuffer()");
+            hex = 0xff;
+        }
+
+        memset(buffer+i, hex, 1);
+
+        if (col<15) {
+            col++;
+        } else {
+            row++;
+            col=0;
+        }
+    }
+
+
+
+    return sz;
 }
 
 // button Events
@@ -266,8 +305,11 @@ void MainWindow::on_bConnect_clicked() {
 }
 
 void MainWindow::on_bSend_clicked() {
-    if (proxy->running())
-        isReadyForSend = true;
+    int sz;
+
+    sz = getBuffer(proxy->getBufferPtr());
+    emit sigReadyToSend(sz);
+
 }
 
 void MainWindow::on_actionQuit_triggered() {
