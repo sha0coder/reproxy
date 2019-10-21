@@ -19,7 +19,7 @@ class Proxy : public QThread
 private:
     const int CONNECTION_TIMEOUT = 5*1000;
     const int READWRITE_TIMEOUT = 5*1000;
-    const int LISTEN_TIMEOUT = 60*1000;
+    const int LISTEN_TIMEOUT = 1*1000;
     const int READ_TIMEOUT = 10;
     const int BUFF_SZ = 1024;
     char *buff;
@@ -28,7 +28,8 @@ private:
     int rPort;
     bool isUDP;
     bool isOk;
-    bool isRunning;
+    bool isRunning;    // internal, feasible means if the thread is alive
+    bool isStoping;    // stop signal, it will try to stop, when it will turn isRunning=false when really is stoped
     QString rHost;
     QTcpSocket *rTSock;
     QTcpServer *lTServer;

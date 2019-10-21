@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
     ui->eIn->setDisabled(true);
     ui->eOut->setDisabled(true);
 
-
+    ui->bSend->setEnabled(false);
     clearStats();
 }
 
@@ -126,7 +126,7 @@ void MainWindow::on_hexChanged(int row, int col) {
             char tmp[4];
             for (int i=0; i<data.size(); i++) {
                 if (bytes[i] != '?') {
-                    snprintf(tmp, 3, "%.2x", bytes[i]);
+                    snprintf(tmp, 3, "%.2x", bytes[i].toLatin1());
                     ui->tHex->setItem(row, i, new QTableWidgetItem(QString::fromUtf8(tmp, 2)));
                 }
             }
@@ -145,7 +145,7 @@ void MainWindow::statRConnected() {
     disableSettings();
     ui->lStatus->setText("connected to endpoint, waiting for client ...");
     ui->bConnect->setText("Disconnect");
-    ui->bConnect->setEnabled(false);
+    ui->bConnect->setEnabled(true);
     box("connect the client please");
 }
 
@@ -157,6 +157,7 @@ void MainWindow::statLConnected() {
     ui->lStatus->setText("connected!");
     ui->bConnect->setText("Disconnect");
     ui->bConnect->setEnabled(true);
+    ui->bSend->setEnabled(true);
 }
 
 void MainWindow::statDisconnected() {
@@ -271,8 +272,6 @@ int MainWindow::getBuffer(char *buffer) {
         }
     }
 
-
-
     return sz;
 }
 
@@ -282,7 +281,6 @@ void MainWindow::on_bConnect_clicked() {
     if (!proxy->running()) {
 
         // Connect
-
         proxy->setLPort(ui->eLPort->text().toInt());
         proxy->setRHost(ui->eRHost->text());
         proxy->setRPort(ui->eRPort->text().toInt());
@@ -301,6 +299,9 @@ void MainWindow::on_bConnect_clicked() {
         // Dissconnect
 
         proxy->stop();
+        //ui->bSend->setEnabled(false);
+        //ui->chkAutoSend->setChecked(true);
+        //proxy->closeConnections();
     }
 }
 
@@ -309,7 +310,8 @@ void MainWindow::on_bSend_clicked() {
 
     sz = getBuffer(proxy->getBufferPtr());
     emit sigReadyToSend(sz);
-
+    ui->tHex->clear();
+    resetHex();
 }
 
 void MainWindow::on_actionQuit_triggered() {

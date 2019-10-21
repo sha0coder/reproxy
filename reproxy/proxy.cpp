@@ -5,6 +5,7 @@
 
 
 Proxy::Proxy(QObject *parent) : QThread(parent) {
+    isStoping = false;
     isRunning = false;
     isUDP = false;
     isOk = true;
@@ -12,10 +13,11 @@ Proxy::Proxy(QObject *parent) : QThread(parent) {
 }
 
 void Proxy::stop() {
-    isRunning = false;
+    isStoping = true;
 }
 
 void Proxy::closeConnections() {
+    // force close connection
     // only call this when the engine already exited the loop, or on the Quit menu.
 
     if (!isRunning)
@@ -83,6 +85,9 @@ char *Proxy::getBufferPtr() {
 // run
 
 void Proxy::run() {
+    isStoping = false;
+    isRunning = true;
+
     emit sigConnecting();
 
     rTSock = new QTcpSocket();
@@ -90,6 +95,7 @@ void Proxy::run() {
     //connect(rTSock, SIGNAL(disconnected()), this, SLOT(onTcpRemoteDisconnected()));
     //connect(rTSock, SIGNAL(readyRead()), this, SLOT(onReadTcpRemote()));
     if (!rTSock->waitForConnected(CONNECTION_TIMEOUT)) {
+        isRunning = false;
         emit sigCantConnect("cannot connect.");
         rTSock->close();
         delete rTSock;
@@ -103,23 +109,38 @@ void Proxy::run() {
     lTServer = new QTcpServer();
     //connect(lTServer, SIGNAL(newConnection()), this, SLOT(onNewTcpConnection()));
     lTServer->listen(QHostAddress::Any, lPort);
-    lTServer->waitForNewConnection(LISTEN_TIMEOUT);
+
+    bool bTimedout = false;
+
+    while (true) {
+        lTServer->waitForNewConnection(LISTEN_TIMEOUT, &bTimedout);
+        if (!isRunning)
+            goto end_thread;
+        if (!bTimedout)
+            break;
+    }
+
     lTSock = lTServer->nextPendingConnection();
 
     buff = (char *)malloc(BUFF_SZ+1);
 
 
-    isRunning = true;
+
     emit sigLConnected();
 
 
     mutReadyForSend.unlock();
-    while (isRunning) {
+    while (!isStoping) {
+        if (!lTSock || !rTSock)
+            goto end_thread;
 
         if (lTSock->state() != lTSock->ConnectedState || rTSock->state() != rTSock->ConnectedState) {
             emit sigDisconnected();
-            return;
+            goto end_thread;
         }
+
+        if (!lTSock || !rTSock)
+            goto end_thread;
 
         if (lTSock->waitForReadyRead(READ_TIMEOUT)) {
 
@@ -135,6 +156,9 @@ void Proxy::run() {
                 mutReadyForSend.unlock();
             }
         }
+
+        if (!lTSock || !rTSock)
+            goto end_thread;
 
         if (rTSock->waitForReadyRead(READ_TIMEOUT)) {
             memset(buff, 0, BUFF_SZ);
@@ -154,7 +178,8 @@ void Proxy::run() {
 
     //rTSock->blockSignals(true);
     //lTSock->blockSignals(true);
-
+end_thread:
+    isRunning = false;
     closeConnections();
 
     emit sigDisconnected();
