@@ -157,7 +157,7 @@ void MainWindow::statLConnected() {
     ui->lStatus->setText("connected!");
     ui->bConnect->setText("Disconnect");
     ui->bConnect->setEnabled(true);
-    ui->bSend->setEnabled(true);
+    ui->bSend->setEnabled(false);
 }
 
 void MainWindow::statDisconnected() {
@@ -187,6 +187,8 @@ void MainWindow::onEndpointData(char *buff, int sz) {
     putBuffer(buff, sz, false);
     if (ui->chkAutoSend->isChecked())
         emit sigReadyToSend(sz);
+    else
+        ui->bSend->setEnabled(true);
 }
 
 void MainWindow::onClientData(char *buff, int sz) {
@@ -194,6 +196,8 @@ void MainWindow::onClientData(char *buff, int sz) {
     putBuffer(buff, sz, true);
     if (ui->chkAutoSend->isChecked())
         emit sigReadyToSend(sz);
+    else
+        ui->bSend->setEnabled(true);
 }
 
 // display and retrieve buffer
@@ -308,6 +312,7 @@ void MainWindow::on_bConnect_clicked() {
 void MainWindow::on_bSend_clicked() {
     int sz;
 
+    ui->bSend->setEnabled(false);
     sz = getBuffer(proxy->getBufferPtr());
     emit sigReadyToSend(sz);
     ui->tHex->clear();

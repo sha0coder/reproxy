@@ -108,7 +108,12 @@ void Proxy::run() {
     lTSock = NULL;
     lTServer = new QTcpServer();
     //connect(lTServer, SIGNAL(newConnection()), this, SLOT(onNewTcpConnection()));
-    lTServer->listen(QHostAddress::Any, lPort);
+
+    if (!lTServer->listen(QHostAddress::Any, lPort)) {
+        emit sigCantConnect("cant open the local port");
+        goto end_thread;
+    }
+
 
     bool bTimedout = false;
 
