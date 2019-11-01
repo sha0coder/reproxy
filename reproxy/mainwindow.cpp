@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
     connect(ui->tHex, SIGNAL(cellChanged(int,int)), this, SLOT(on_hexChanged(int,int)));
 
     connect(ui->actionSave_Bin, SIGNAL(triggered(bool)), this, SLOT(on_saveBin()));
-    connect(ui->actionLoad_Hex, SIGNAL(triggered(bool)), this, SLOT(on_saveHex()));
+    connect(ui->actionSave_Hex, SIGNAL(triggered(bool)), this, SLOT(on_saveHex()));
     connect(ui->actionLoad_Bin, SIGNAL(triggered(bool)), this, SLOT(on_loadBin()));
     connect(ui->actionLoad_Hex, SIGNAL(triggered(bool)), this, SLOT(on_loadHex()));
 
@@ -392,20 +392,19 @@ void MainWindow::on_saveHex() {
     }
 
     int col = 0;
-    for (int i=0; i<z; i++) {
+    char hex[4];
+    for (int i=0; i<sz; i++) {
         snprintf(hex, 3, "%.2x", buff[i]);
         ofs << hex << " ";
-        if (col >= 0xf)
+        if (col++ >= 0xf)
             ofs << endl;
     }
-    ofs << buff;
     ofs.close();
 }
 
 void MainWindow::on_loadBin() {
     char buff[1024];
     int n;
-
 
     std::ifstream ifs("getFilename()");
     if (!ifs) {
