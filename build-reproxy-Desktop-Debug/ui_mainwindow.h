@@ -40,6 +40,7 @@ public:
     QAction *actionManual;
     QAction *actionAbout;
     QAction *actionAbout_2;
+    QAction *actionSave_all;
     QWidget *centralWidget;
     QLineEdit *eLPort;
     QLineEdit *eRHost;
@@ -97,6 +98,8 @@ public:
         actionAbout->setObjectName(QStringLiteral("actionAbout"));
         actionAbout_2 = new QAction(MainWindow);
         actionAbout_2->setObjectName(QStringLiteral("actionAbout_2"));
+        actionSave_all = new QAction(MainWindow);
+        actionSave_all->setObjectName(QStringLiteral("actionSave_all"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         eLPort = new QLineEdit(centralWidget);
@@ -229,6 +232,7 @@ public:
         menuFile->addAction(actionLoad_Bin);
         menuFile->addAction(actionSave_Hex);
         menuFile->addAction(actionSave_Bin);
+        menuFile->addAction(actionSave_all);
         menuFile->addSeparator();
         menuFile->addAction(actionQuit);
         menuHelp->addAction(actionManual);
@@ -251,6 +255,7 @@ public:
         actionManual->setText(QApplication::translate("MainWindow", "Manual", Q_NULLPTR));
         actionAbout->setText(QApplication::translate("MainWindow", "About", Q_NULLPTR));
         actionAbout_2->setText(QApplication::translate("MainWindow", "About", Q_NULLPTR));
+        actionSave_all->setText(QApplication::translate("MainWindow", "Save all", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         eLPort->setToolTip(QApplication::translate("MainWindow", "local port number to open for receiving connections from the client.", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP

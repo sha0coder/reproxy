@@ -111,7 +111,9 @@ void Proxy::run() {
 
     if (!lTServer->listen(QHostAddress::Any, lPort)) {
         emit sigCantConnect("cant open the local port");
-        goto end_thread;
+        isRunning = false;
+        closeConnections();
+        return;
     }
 
 
@@ -119,8 +121,13 @@ void Proxy::run() {
 
     while (true) {
         lTServer->waitForNewConnection(LISTEN_TIMEOUT, &bTimedout);
-        if (!isRunning)
-            goto end_thread;
+        if (!isRunning) {
+            isRunning = false;
+            closeConnections();
+            emit sigDisconnected();
+            return;
+        }
+
         if (!bTimedout)
             break;
     }
@@ -137,15 +144,15 @@ void Proxy::run() {
     mutReadyForSend.unlock();
     while (!isStoping) {
         if (!lTSock || !rTSock)
-            goto end_thread;
+            break;
 
         if (lTSock->state() != lTSock->ConnectedState || rTSock->state() != rTSock->ConnectedState) {
             emit sigDisconnected();
-            goto end_thread;
+            break;
         }
 
         if (!lTSock || !rTSock)
-            goto end_thread;
+            break;
 
         if (lTSock->waitForReadyRead(READ_TIMEOUT)) {
 
@@ -163,7 +170,7 @@ void Proxy::run() {
         }
 
         if (!lTSock || !rTSock)
-            goto end_thread;
+            break;
 
         if (rTSock->waitForReadyRead(READ_TIMEOUT)) {
             memset(buff, 0, BUFF_SZ);
@@ -183,7 +190,7 @@ void Proxy::run() {
 
     //rTSock->blockSignals(true);
     //lTSock->blockSignals(true);
-end_thread:
+
     isRunning = false;
     closeConnections();
 

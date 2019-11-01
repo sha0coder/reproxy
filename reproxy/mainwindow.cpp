@@ -3,6 +3,10 @@
 
 #include <QObject>
 #include <QCoreApplication>
+#include <QFileDialog>
+#include <fstream>
+#include <iostream>
+
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -21,6 +25,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
     connect(proxy, SIGNAL(sigEndpiontData(char*,int)), this, SLOT(onEndpointData(char*,int)));
     connect(this, SIGNAL(sigReadyToSend(int)), proxy, SLOT(onReadyToSend(int)));
     connect(ui->tHex, SIGNAL(cellChanged(int,int)), this, SLOT(on_hexChanged(int,int)));
+
+    connect(ui->actionSave_Bin, SIGNAL(triggered(bool)), this, SLOT(on_saveBin()));
+    connect(ui->actionLoad_Hex, SIGNAL(triggered(bool)), this, SLOT(on_saveHex()));
+    connect(ui->actionLoad_Bin, SIGNAL(triggered(bool)), this, SLOT(on_loadBin()));
+    connect(ui->actionLoad_Hex, SIGNAL(triggered(bool)), this, SLOT(on_loadHex()));
 
     resetHex();
 
@@ -319,8 +328,103 @@ void MainWindow::on_bSend_clicked() {
     resetHex();
 }
 
+//  MENU
+
 void MainWindow::on_actionQuit_triggered() {
     proxy->closeConnections();
     delete proxy;
     exit(1);
 }
+
+QString MainWindow::getFilename() {
+    QString filename = ui->eRHost->text()+"_";
+
+    if (ui->bSend->text() == "<<< Send <<<") {
+        filename += "in_";
+        filename += ui->eIn->text();
+    } else {
+        filename += "out_";
+        filename += ui->eOut->text();
+    }
+
+    filename += ".bin";
+
+    return filename;
+}
+
+void MainWindow::on_saveBin() {
+    char buff[1024];
+    int sz = getBuffer(buff);
+    std::string filename;
+
+    filename = QFileDialog::getSaveFileName(this,
+                                            tr("save binary"),getFilename(),
+                                            tr("binary file (*.bin)")).toStdString();
+
+    if (filename.size()==0)
+        return;
+
+    std::ofstream ofs(filename);
+    if (!ofs) {
+        box("cant save the data");
+        return;
+    }
+    ofs.write(buff, sz);
+    ofs.close();
+}
+
+void MainWindow::on_saveHex() {
+    char buff[1024];
+    int sz = getBuffer(buff);
+    std::string filename;
+
+    filename = QFileDialog::getSaveFileName(this,
+                                            tr("save hexa"),getFilename(),
+                                            tr("hexa text file (*.txt)")).toStdString();
+
+    if (filename.size()==0)
+        return;
+
+    std::ofstream ofs(filename);
+    if (!ofs) {
+        box("cant save the data");
+        return;
+    }
+
+    int col = 0;
+    for (int i=0; i<z; i++) {
+        snprintf(hex, 3, "%.2x", buff[i]);
+        ofs << hex << " ";
+        if (col >= 0xf)
+            ofs << endl;
+    }
+    ofs << buff;
+    ofs.close();
+}
+
+void MainWindow::on_loadBin() {
+    char buff[1024];
+    int n;
+
+
+    std::ifstream ifs("getFilename()");
+    if (!ifs) {
+        box("cant load file");
+        return;
+    }
+    n = ifs.readsome(buff, 1024);
+    ifs.close();
+
+    putBuffer(buff, n, true);
+}
+
+void MainWindow::on_loadHex() {
+
+}
+
+
+
+
+
+
+
