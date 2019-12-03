@@ -34,3 +34,4 @@ HEADERS  += mainwindow.h \
     proxy.h
 
 FORMS    += mainwindow.ui
+QMAKE_CXXFLAGS += -O2 -fnon-call-exceptions

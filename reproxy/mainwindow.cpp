@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
     connect(ui->actionSave_Hex, SIGNAL(triggered(bool)), this, SLOT(on_saveHex()));
     connect(ui->actionLoad_Bin, SIGNAL(triggered(bool)), this, SLOT(on_loadBin()));
     connect(ui->actionLoad_Hex, SIGNAL(triggered(bool)), this, SLOT(on_loadHex()));
+    connect(ui->actionAbout_2, SIGNAL(triggered(bool)), this, SLOT(on_about()));
 
     resetHex();
 
@@ -181,7 +182,7 @@ void MainWindow::statCantConnect(QString errmsg) {
     enableSettings();
     ui->lStatus->setText("can't connect "+errmsg);
     ui->bConnect->setText("Connect");
-    box("cant connect");
+    box(errmsg);
     ui->bConnect->setEnabled(true);
 }
 
@@ -404,23 +405,33 @@ void MainWindow::on_saveHex() {
 
 void MainWindow::on_loadBin() {
     char buff[1024];
-    int n;
+    int sz;
+    std::string filename;
 
-    std::ifstream ifs("getFilename()");
+
+    filename = QFileDialog::getOpenFileName(this,
+                                            tr("load binary file"),
+                                            "",
+                                            tr("binary file (*.bin)")).toStdString();
+
+    std::ifstream ifs(filename);
     if (!ifs) {
         box("cant load file");
         return;
     }
-    n = ifs.readsome(buff, 1024);
+    sz = ifs.readsome(buff, 1024);
     ifs.close();
 
-    putBuffer(buff, n, true);
+    putBuffer(buff, sz, true);
 }
 
 void MainWindow::on_loadHex() {
 
 }
 
+void MainWindow::on_about() {
+    box("reproxy - the multiprotocol reverse proxy\nby @sha0coder");
+}
 
 
 

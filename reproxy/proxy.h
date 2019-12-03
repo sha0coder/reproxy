@@ -42,6 +42,7 @@ public:
     void run(void);
     void closeConnections(void);
     void stop(void);
+    void forceStop(void);
     bool running(void);
     bool ok();
 

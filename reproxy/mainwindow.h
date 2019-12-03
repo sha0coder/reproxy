@@ -51,6 +51,7 @@ private slots:
     void on_saveBin();
     void on_loadHex();
     void on_loadBin();
+    void on_about();
 
 private:
     bool silent;

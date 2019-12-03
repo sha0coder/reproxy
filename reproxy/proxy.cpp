@@ -16,7 +16,22 @@ void Proxy::stop() {
     isStoping = true;
 }
 
-void Proxy::closeConnections() {
+void Proxy::forceStop() { // dont do this
+    isStoping = true;
+    isRunning = false;
+    try {
+        if (rTSock && rTSock->isOpen())
+            rTSock->close();
+        if (lTSock && lTSock->isOpen())
+            lTSock->close();
+        //if (lTServer)
+        //    lTServer->close();
+    } catch(const std::exception& e) {
+        qDebug() << "forced to stop" << endl;
+    }
+}
+
+void Proxy::closeConnections() { // dont do this
     // force close connection
     // only call this when the engine already exited the loop, or on the Quit menu.
 
@@ -32,8 +47,8 @@ void Proxy::closeConnections() {
     delete lTSock;
     delete lTServer;
 
-    memset(buff, 0, BUFF_SZ);
-    free(buff);
+    //memset(buff, 0, BUFF_SZ);
+    //free(buff);
 }
 
 bool Proxy::running() {
@@ -88,91 +103,133 @@ void Proxy::run() {
     isStoping = false;
     isRunning = true;
 
+    qDebug() << "starting proxy thread" << endl;
     emit sigConnecting();
 
+    try {
+
+
+    qDebug() << "connecting to rHost " << rHost << endl;
     rTSock = new QTcpSocket();
     rTSock->connectToHost(rHost, rPort);
     //connect(rTSock, SIGNAL(disconnected()), this, SLOT(onTcpRemoteDisconnected()));
     //connect(rTSock, SIGNAL(readyRead()), this, SLOT(onReadTcpRemote()));
+    qDebug() << "waiting for connected" << endl;
     if (!rTSock->waitForConnected(CONNECTION_TIMEOUT)) {
+        qDebug() << "timeout" << endl;
         isRunning = false;
         emit sigCantConnect("cannot connect.");
         rTSock->close();
         delete rTSock;
         return;
     }
-
+    qDebug() << "connected" << endl;
 
     emit sigRConnected();
 
     lTSock = NULL;
+
+    // avoid pre opened states
+    qDebug() << "checking previous listeners" << endl;
+    //if (lTServer && lTServer->isListening())
+    //    lTServer->close();
+
     lTServer = new QTcpServer();
     //connect(lTServer, SIGNAL(newConnection()), this, SLOT(onNewTcpConnection()));
+    qDebug() << " awaiting connections " << endl;
 
     if (!lTServer->listen(QHostAddress::Any, lPort)) {
-        emit sigCantConnect("cant open the local port");
+        qDebug() << " listen failed " << endl;
+        if(isRunning)
+            emit sigCantConnect("cant open the local port");
         isRunning = false;
         closeConnections();
         return;
     }
 
-
+    qDebug() << "wait loop" << endl;
     bool bTimedout = false;
 
-    while (true) {
-        lTServer->waitForNewConnection(LISTEN_TIMEOUT, &bTimedout);
-        if (!isRunning) {
-            isRunning = false;
+
+    while (true && lTServer) {
+        qDebug() << "wait loop start iteration" << endl;
+        if (lTServer->waitForNewConnection(LISTEN_TIMEOUT, &bTimedout))
+            break;
+
+        if (isStoping) {
             closeConnections();
-            emit sigDisconnected();
+            isRunning = false;
+            emit sigCantConnect("disconnection when listening");
             return;
         }
 
         if (!bTimedout)
             break;
     }
+    qDebug() << "wait loop ended" << endl;
 
     lTSock = lTServer->nextPendingConnection();
 
+    qDebug() << "allocating buffer" << endl;
     buff = (char *)malloc(BUFF_SZ+1);
-
 
 
     emit sigLConnected();
 
 
     mutReadyForSend.unlock();
+    qDebug() << "starting main loop" << endl;
     while (!isStoping) {
-        if (!lTSock || !rTSock)
+        qDebug() << "iteration" << endl;
+        if (!lTSock || !rTSock) // || !lTSock->isOpen() || !rTSock->isOpen())
             break;
 
+        qDebug() << "iteration1" << endl;
         if (lTSock->state() != lTSock->ConnectedState || rTSock->state() != rTSock->ConnectedState) {
             emit sigDisconnected();
             break;
         }
-
-        if (!lTSock || !rTSock)
+        qDebug() << "iteration2" << endl;
+        if (!lTSock || !rTSock || isStoping) // || !lTSock->isOpen() || !rTSock->isOpen())
             break;
 
+        qDebug() << "iteration3" << endl;
         if (lTSock->waitForReadyRead(READ_TIMEOUT)) {
 
+            if (isStoping)
+                break;
+
+            qDebug() << "doing memset" << endl;
             memset(buff, 0, BUFF_SZ);
+
+            qDebug() << "reading buffer" << endl;
             sz = lTSock->read(buff, BUFF_SZ);
             if (sz > 0) {
+                qDebug() << "lock" << endl;
                 mutReadyForSend.lock();
                 emit sigClientData(buff, sz);
 
                 mutReadyForSend.lock(); // the window must unlock this
+                qDebug() << "going to write" << endl;
                 rTSock->write(buff, sz);
                 rTSock->flush();
                 mutReadyForSend.unlock();
+                qDebug() << "unlock" << endl;
             }
         }
 
-        if (!lTSock || !rTSock)
+        if (isStoping)
             break;
 
+        qDebug() << "iteration4" << endl;
+        if (!lTSock || !rTSock || isStoping) // || !lTSock->isOpen() || !rTSock->isOpen())
+            break;
+
+        qDebug() << "iteration5" << endl;
         if (rTSock->waitForReadyRead(READ_TIMEOUT)) {
+            if (isStoping)
+                break;
+
             memset(buff, 0, BUFF_SZ);
             sz = rTSock->read(buff, BUFF_SZ);
             if (sz > 0) {
@@ -188,13 +245,25 @@ void Proxy::run() {
     }
 
 
-    //rTSock->blockSignals(true);
-    //lTSock->blockSignals(true);
 
-    isRunning = false;
     closeConnections();
+    free(buff);
+    isRunning = false;
 
     emit sigDisconnected();
+
+
+
+    //rTSock->blockSignals(true);
+    //lTSock->blockSignals(true);
+    } catch(...) {
+        if (lTServer)
+            lTServer->close();
+
+        qDebug() << "finally stopped forcefully" << endl;
+        isRunning = false;
+    }
+
 }
 
 // SLOTS
@@ -254,6 +323,5 @@ void Proxy::onReadTcpRemote() {
     buff = rTSock->readAll();
     if (buff.size() > 0)
         lTSock->write(buff.constData(), buff.size());
-
 
 }
