@@ -143,7 +143,10 @@ void Proxy::run() {
         if(isRunning)
             emit sigCantConnect("cant open the local port");
         isRunning = false;
-        closeConnections();
+
+        rTSock->close();
+        delete rTSock;
+
         return;
     }
 
@@ -157,7 +160,9 @@ void Proxy::run() {
             break;
 
         if (isStoping) {
-            closeConnections();
+            rTSock->close();
+            delete rTSock;
+            delete lTServer;
             isRunning = false;
             emit sigCantConnect("disconnection when listening");
             return;
