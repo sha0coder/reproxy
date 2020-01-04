@@ -51,9 +51,13 @@ private slots:
     void on_saveBin();
     void on_loadHex();
     void on_loadBin();
+    void on_saveAll();
     void on_about();
+    void on_radare();
 
 private:
+    bool saveAll;
+    std::string saveAll_folder;
     bool silent;
     Proxy *proxy;
     bool isReadyForSend;
@@ -65,6 +69,7 @@ private:
 
     void putBuffer(char *buffer, int sz, bool bSend);   // this reads buffer pointer and writes the hex bytes on the screen
     int getBuffer(char *buffer);                        // this gets the hex from the screen and write them on the buffer pointer (sz: 1024)
+    void binarySave(std::string filename, char *buffer, int sz);
 
     void resetHex();
 

@@ -40,6 +40,7 @@ public:
     QAction *actionAbout;
     QAction *actionAbout_2;
     QAction *actionSave_all;
+    QAction *actionRadare;
     QWidget *centralWidget;
     QLineEdit *eLPort;
     QLineEdit *eRHost;
@@ -99,6 +100,8 @@ public:
         actionAbout_2->setObjectName(QString::fromUtf8("actionAbout_2"));
         actionSave_all = new QAction(MainWindow);
         actionSave_all->setObjectName(QString::fromUtf8("actionSave_all"));
+        actionRadare = new QAction(MainWindow);
+        actionRadare->setObjectName(QString::fromUtf8("actionRadare"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         eLPort = new QLineEdit(centralWidget);
@@ -136,7 +139,7 @@ public:
         chkAutoSend = new QCheckBox(centralWidget);
         chkAutoSend->setObjectName(QString::fromUtf8("chkAutoSend"));
         chkAutoSend->setEnabled(true);
-        chkAutoSend->setGeometry(QRect(10, 70, 82, 23));
+        chkAutoSend->setGeometry(QRect(10, 70, 101, 23));
         chkAutoSend->setChecked(false);
         bSend = new QPushButton(centralWidget);
         bSend->setObjectName(QString::fromUtf8("bSend"));
@@ -194,7 +197,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 682, 22));
+        menuBar->setGeometry(QRect(0, 0, 682, 21));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuTools = new QMenu(menuBar);
@@ -234,6 +237,7 @@ public:
         menuFile->addAction(actionSave_all);
         menuFile->addSeparator();
         menuFile->addAction(actionQuit);
+        menuTools_2->addAction(actionRadare);
         menuHelp->addAction(actionManual);
         menuHelp->addSeparator();
         menuHelp->addAction(actionAbout_2);
@@ -255,6 +259,7 @@ public:
         actionAbout->setText(QCoreApplication::translate("MainWindow", "About", nullptr));
         actionAbout_2->setText(QCoreApplication::translate("MainWindow", "About", nullptr));
         actionSave_all->setText(QCoreApplication::translate("MainWindow", "Save all", nullptr));
+        actionRadare->setText(QCoreApplication::translate("MainWindow", "Radare", nullptr));
 #if QT_CONFIG(tooltip)
         eLPort->setToolTip(QCoreApplication::translate("MainWindow", "local port number to open for receiving connections from the client.", nullptr));
 #endif // QT_CONFIG(tooltip)
@@ -268,7 +273,7 @@ public:
         groupBox->setTitle(QCoreApplication::translate("MainWindow", "Protocol:", nullptr));
         rTCP->setText(QCoreApplication::translate("MainWindow", "TCP", nullptr));
         rUDP->setText(QCoreApplication::translate("MainWindow", "UDP", nullptr));
-        chkAutoSend->setText(QCoreApplication::translate("MainWindow", "Auto send", nullptr));
+        chkAutoSend->setText(QCoreApplication::translate("MainWindow", "Auto send ", nullptr));
         bSend->setText(QCoreApplication::translate("MainWindow", ">>> Send >>>", nullptr));
         label_4->setText(QCoreApplication::translate("MainWindow", "IN:", nullptr));
         eIn->setText(QCoreApplication::translate("MainWindow", "0", nullptr));

@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
     silent = false;
     //isReadyForSend = false;
     ui->lStatus->setText("Disconnected.");
+    saveAll = false;
 
     proxy = new Proxy(this);
     connect(proxy, SIGNAL(setStatus(QString)), this, SLOT(setStatusMessage(QString)));
@@ -31,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
     connect(ui->actionLoad_Bin, SIGNAL(triggered(bool)), this, SLOT(on_loadBin()));
     connect(ui->actionLoad_Hex, SIGNAL(triggered(bool)), this, SLOT(on_loadHex()));
     connect(ui->actionAbout_2, SIGNAL(triggered(bool)), this, SLOT(on_about()));
+    connect(ui->actionSave_all, SIGNAL(triggered(bool)), this, SLOT(on_saveAll()));
+    connect(ui->actionRadare, SIGNAL(triggered(bool)), this, SLOT(on_radare()));
 
     resetHex();
 
@@ -199,6 +202,9 @@ void MainWindow::onEndpointData(char *buff, int sz) {
         emit sigReadyToSend(sz);
     else
         ui->bSend->setEnabled(true);
+
+     if (saveAll)
+        binarySave(saveAll_folder+"/"+getFilename().toStdString()+".bin", buff, sz);
 }
 
 void MainWindow::onClientData(char *buff, int sz) {
@@ -208,6 +214,9 @@ void MainWindow::onClientData(char *buff, int sz) {
         emit sigReadyToSend(sz);
     else
         ui->bSend->setEnabled(true);
+
+    if (saveAll)
+        binarySave(saveAll_folder+"/"+getFilename().toStdString()+".bin", buff, sz);
 }
 
 // display and retrieve buffer
@@ -288,6 +297,16 @@ int MainWindow::getBuffer(char *buffer) {
     return sz;
 }
 
+void MainWindow::binarySave(std::string filename, char *buff, int sz) {
+    std::ofstream ofs(filename);
+    if (!ofs) {
+        box("cant save the data");
+        return;
+    }
+    ofs.write(buff, sz);
+    ofs.close();
+}
+
 // button Events
 
 void MainWindow::on_bConnect_clicked() {
@@ -310,7 +329,6 @@ void MainWindow::on_bConnect_clicked() {
 
     } else {
         // Dissconnect
-
         proxy->stop();
         //ui->bSend->setEnabled(false);
         //ui->chkAutoSend->setChecked(true);
@@ -426,7 +444,6 @@ void MainWindow::on_loadHex() {
     std::string filename;
     int pos = 0;
     int num;
-    char b;
     char buff[1024];
     char line[255];
     QString qsline;
@@ -463,12 +480,43 @@ void MainWindow::on_loadHex() {
     putBuffer(buff, pos, true);
 }
 
+void MainWindow::on_saveAll() {
+
+    if (saveAll) {
+        box("save all disabled");
+        saveAll = false;
+        return;
+    }
+
+    saveAll = true;
+    saveAll_folder = QFileDialog::getExistingDirectory(this,
+                                               tr("select folder"),
+                                               "").toStdString();
+    box(QString::fromStdString(saveAll_folder));
+}
+
 void MainWindow::on_about() {
     box("reproxy - the multiprotocol reverse proxy\nby @sha0coder");
 }
 
+void MainWindow::on_radare() {
+    std::string filename;
+    QProcess process;
+    char *buffer;
+    int sz;
 
+    buffer = (char *)malloc(1024);
+    sz = getBuffer(buffer);
+    filename = "/tmp/"+getFilename().toStdString()+".bin";
+    binarySave(filename, buffer, sz);
+    free(buffer);
 
+    QStringList args;
+    //args << "--e";
+    //args << "/usr/bin/r2";
+    args << QString::fromStdString(filename);
 
+    process.startDetached("/usr/bin/r2", args);
+}
 
 
