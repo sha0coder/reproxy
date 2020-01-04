@@ -1,23 +1,26 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'proxy.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.7.1)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.14.0)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
+#include <memory>
 #include "../reproxy/proxy.h"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'proxy.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.7.1. It"
+#error "This file was generated using the moc from 5.14.0. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
 
 QT_BEGIN_MOC_NAMESPACE
+QT_WARNING_PUSH
+QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Proxy_t {
     QByteArrayData data[21];
     char stringdata0[256];
@@ -65,7 +68,7 @@ QT_MOC_LITERAL(20, 242, 13) // "onReadyToSend"
 static const uint qt_meta_data_Proxy[] = {
 
  // content:
-       7,       // revision
+       8,       // revision
        0,       // classname
        0,    0, // classinfo
       14,   14, // methods
@@ -117,7 +120,7 @@ static const uint qt_meta_data_Proxy[] = {
 void Proxy::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
-        Proxy *_t = static_cast<Proxy *>(_o);
+        auto *_t = static_cast<Proxy *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->setStatus((*reinterpret_cast< QString(*)>(_a[1]))); break;
@@ -138,59 +141,58 @@ void Proxy::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
-        void **func = reinterpret_cast<void **>(_a[1]);
         {
-            typedef void (Proxy::*_t)(QString );
-            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&Proxy::setStatus)) {
+            using _t = void (Proxy::*)(QString );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Proxy::setStatus)) {
                 *result = 0;
                 return;
             }
         }
         {
-            typedef void (Proxy::*_t)();
-            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&Proxy::sigDisconnected)) {
+            using _t = void (Proxy::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Proxy::sigDisconnected)) {
                 *result = 1;
                 return;
             }
         }
         {
-            typedef void (Proxy::*_t)();
-            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&Proxy::sigRConnected)) {
+            using _t = void (Proxy::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Proxy::sigRConnected)) {
                 *result = 2;
                 return;
             }
         }
         {
-            typedef void (Proxy::*_t)();
-            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&Proxy::sigLConnected)) {
+            using _t = void (Proxy::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Proxy::sigLConnected)) {
                 *result = 3;
                 return;
             }
         }
         {
-            typedef void (Proxy::*_t)(QString );
-            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&Proxy::sigCantConnect)) {
+            using _t = void (Proxy::*)(QString );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Proxy::sigCantConnect)) {
                 *result = 4;
                 return;
             }
         }
         {
-            typedef void (Proxy::*_t)();
-            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&Proxy::sigConnecting)) {
+            using _t = void (Proxy::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Proxy::sigConnecting)) {
                 *result = 5;
                 return;
             }
         }
         {
-            typedef void (Proxy::*_t)(char * , int );
-            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&Proxy::sigEndpiontData)) {
+            using _t = void (Proxy::*)(char * , int );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Proxy::sigEndpiontData)) {
                 *result = 6;
                 return;
             }
         }
         {
-            typedef void (Proxy::*_t)(char * , int );
-            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&Proxy::sigClientData)) {
+            using _t = void (Proxy::*)(char * , int );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Proxy::sigClientData)) {
                 *result = 7;
                 return;
             }
@@ -198,10 +200,14 @@ void Proxy::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
     }
 }
 
-const QMetaObject Proxy::staticMetaObject = {
-    { &QThread::staticMetaObject, qt_meta_stringdata_Proxy.data,
-      qt_meta_data_Proxy,  qt_static_metacall, Q_NULLPTR, Q_NULLPTR}
-};
+QT_INIT_METAOBJECT const QMetaObject Proxy::staticMetaObject = { {
+    QMetaObject::SuperData::link<QThread::staticMetaObject>(),
+    qt_meta_stringdata_Proxy.data,
+    qt_meta_data_Proxy,
+    qt_static_metacall,
+    nullptr,
+    nullptr
+} };
 
 
 const QMetaObject *Proxy::metaObject() const
@@ -211,9 +217,9 @@ const QMetaObject *Proxy::metaObject() const
 
 void *Proxy::qt_metacast(const char *_clname)
 {
-    if (!_clname) return Q_NULLPTR;
+    if (!_clname) return nullptr;
     if (!strcmp(_clname, qt_meta_stringdata_Proxy.stringdata0))
-        return static_cast<void*>(const_cast< Proxy*>(this));
+        return static_cast<void*>(this);
     return QThread::qt_metacast(_clname);
 }
 
@@ -237,52 +243,53 @@ int Proxy::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 // SIGNAL 0
 void Proxy::setStatus(QString _t1)
 {
-    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 
 // SIGNAL 1
 void Proxy::sigDisconnected()
 {
-    QMetaObject::activate(this, &staticMetaObject, 1, Q_NULLPTR);
+    QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
 }
 
 // SIGNAL 2
 void Proxy::sigRConnected()
 {
-    QMetaObject::activate(this, &staticMetaObject, 2, Q_NULLPTR);
+    QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
 }
 
 // SIGNAL 3
 void Proxy::sigLConnected()
 {
-    QMetaObject::activate(this, &staticMetaObject, 3, Q_NULLPTR);
+    QMetaObject::activate(this, &staticMetaObject, 3, nullptr);
 }
 
 // SIGNAL 4
 void Proxy::sigCantConnect(QString _t1)
 {
-    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 4, _a);
 }
 
 // SIGNAL 5
 void Proxy::sigConnecting()
 {
-    QMetaObject::activate(this, &staticMetaObject, 5, Q_NULLPTR);
+    QMetaObject::activate(this, &staticMetaObject, 5, nullptr);
 }
 
 // SIGNAL 6
 void Proxy::sigEndpiontData(char * _t1, int _t2)
 {
-    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
     QMetaObject::activate(this, &staticMetaObject, 6, _a);
 }
 
 // SIGNAL 7
 void Proxy::sigClientData(char * _t1, int _t2)
 {
-    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
     QMetaObject::activate(this, &staticMetaObject, 7, _a);
 }
+QT_WARNING_POP
 QT_END_MOC_NAMESPACE

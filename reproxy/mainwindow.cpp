@@ -53,7 +53,7 @@ void MainWindow::resetHex() {
     ui->tHex->setColumnCount(17);
     ui->tHex->setHorizontalHeaderLabels(titles);
     for (int i=0; i<16; i++)
-        ui->tHex->setColumnWidth(i, 25);
+        ui->tHex->setColumnWidth(i, 27);
     ui->tHex->setColumnWidth(16, 250);
     //ui->tHex->insertRow(0);
 }
@@ -240,7 +240,7 @@ void MainWindow::putBuffer(char *buffer, int sz, bool bSend) {
 
         QString data;
         for (col=0; col<16 && i+col<sz; col++) {
-            snprintf(hex, 3, "%.2x", buffer[i+col]);
+            snprintf(hex, 3, "%.2x", buffer[i+col]); // byte2hex
             ui->tHex->setItem(row, col, new QTableWidgetItem( QString(hex) ));
             if (buffer[i+col] >= ' ' && buffer[i+col] <= '~')
                 data += QString::fromUtf8(&buffer[i+col], 1);
@@ -268,7 +268,6 @@ int MainWindow::getBuffer(char *buffer) {
     col = 0;
     row = 0;
     for (i=0; i<sz; i++) {
-
         hex = ui->tHex->item(row, col)->text().toInt(&ok, 16);
         if (!ok) {
             // should not enter here because the cell update is already validated
@@ -348,8 +347,6 @@ QString MainWindow::getFilename() {
         filename += ui->eOut->text();
     }
 
-    filename += ".bin";
-
     return filename;
 }
 
@@ -359,7 +356,7 @@ void MainWindow::on_saveBin() {
     std::string filename;
 
     filename = QFileDialog::getSaveFileName(this,
-                                            tr("save binary"),getFilename(),
+                                            tr("save binary"),getFilename()+".bin",
                                             tr("binary file (*.bin)")).toStdString();
 
     if (filename.size()==0)
@@ -380,7 +377,7 @@ void MainWindow::on_saveHex() {
     std::string filename;
 
     filename = QFileDialog::getSaveFileName(this,
-                                            tr("save hexa"),getFilename(),
+                                            tr("save hexa"),getFilename()+".txt",
                                             tr("hexa text file (*.txt)")).toStdString();
 
     if (filename.size()==0)
@@ -426,7 +423,44 @@ void MainWindow::on_loadBin() {
 }
 
 void MainWindow::on_loadHex() {
+    std::string filename;
+    int pos = 0;
+    int num;
+    char b;
+    char buff[1024];
+    char line[255];
+    QString qsline;
+    bool ok;
 
+
+    filename = QFileDialog::getOpenFileName(this,
+                                            tr("load hex file"),
+                                            "",
+                                            tr("hex file (*.txt)")).toStdString();
+    std::ifstream ifs(filename);
+    if (!ifs) {
+        box("cant load file");
+        return;
+    }
+
+    while(ifs.getline(line, 254)) {
+
+        qsline = QString::fromStdString(std::string(line));
+
+        auto spl = qsline.split(" ");
+        for (int i=0; i<spl.length(); i++) {
+            if (spl[i] == "")
+                break;
+
+            num = spl[i].toInt(&ok, 16);
+            if (!ok)
+                num = 0x00;
+
+            buff[pos++] = (char)(num & 0x000000ff);
+        }
+    }
+    ifs.close();
+    putBuffer(buff, pos, true);
 }
 
 void MainWindow::on_about() {

@@ -183,22 +183,22 @@ void Proxy::run() {
 
 
     mutReadyForSend.unlock();
-    qDebug() << "starting main loop" << endl;
+    //qDebug() << "starting main loop" << endl;
     while (!isStoping) {
-        qDebug() << "iteration" << endl;
+        //qDebug() << "iteration" << endl;
         if (!lTSock || !rTSock) // || !lTSock->isOpen() || !rTSock->isOpen())
             break;
 
-        qDebug() << "iteration1" << endl;
+        //qDebug() << "iteration1" << endl;
         if (lTSock->state() != lTSock->ConnectedState || rTSock->state() != rTSock->ConnectedState) {
             emit sigDisconnected();
             break;
         }
-        qDebug() << "iteration2" << endl;
+        //qDebug() << "iteration2" << endl;
         if (!lTSock || !rTSock || isStoping) // || !lTSock->isOpen() || !rTSock->isOpen())
             break;
 
-        qDebug() << "iteration3" << endl;
+        //qDebug() << "iteration3" << endl;
         if (lTSock->waitForReadyRead(READ_TIMEOUT)) {
 
             if (isStoping)
@@ -226,11 +226,11 @@ void Proxy::run() {
         if (isStoping)
             break;
 
-        qDebug() << "iteration4" << endl;
+        //qDebug() << "iteration4" << endl;
         if (!lTSock || !rTSock || isStoping) // || !lTSock->isOpen() || !rTSock->isOpen())
             break;
 
-        qDebug() << "iteration5" << endl;
+        //qDebug() << "iteration5" << endl;
         if (rTSock->waitForReadyRead(READ_TIMEOUT)) {
             if (isStoping)
                 break;

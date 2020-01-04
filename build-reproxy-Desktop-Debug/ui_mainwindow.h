@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.7.1
+** Created by: Qt User Interface Compiler version 5.14.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -12,7 +12,6 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHeaderView>
@@ -78,115 +77,115 @@ public:
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
-            MainWindow->setObjectName(QStringLiteral("MainWindow"));
+            MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
         MainWindow->resize(682, 600);
         MainWindow->setMinimumSize(QSize(682, 600));
         MainWindow->setMaximumSize(QSize(682, 600));
         actionLoad_Hex = new QAction(MainWindow);
-        actionLoad_Hex->setObjectName(QStringLiteral("actionLoad_Hex"));
+        actionLoad_Hex->setObjectName(QString::fromUtf8("actionLoad_Hex"));
         actionLoad_Bin = new QAction(MainWindow);
-        actionLoad_Bin->setObjectName(QStringLiteral("actionLoad_Bin"));
+        actionLoad_Bin->setObjectName(QString::fromUtf8("actionLoad_Bin"));
         actionSave_Hex = new QAction(MainWindow);
-        actionSave_Hex->setObjectName(QStringLiteral("actionSave_Hex"));
+        actionSave_Hex->setObjectName(QString::fromUtf8("actionSave_Hex"));
         actionSave_Bin = new QAction(MainWindow);
-        actionSave_Bin->setObjectName(QStringLiteral("actionSave_Bin"));
+        actionSave_Bin->setObjectName(QString::fromUtf8("actionSave_Bin"));
         actionQuit = new QAction(MainWindow);
-        actionQuit->setObjectName(QStringLiteral("actionQuit"));
+        actionQuit->setObjectName(QString::fromUtf8("actionQuit"));
         actionManual = new QAction(MainWindow);
-        actionManual->setObjectName(QStringLiteral("actionManual"));
+        actionManual->setObjectName(QString::fromUtf8("actionManual"));
         actionAbout = new QAction(MainWindow);
-        actionAbout->setObjectName(QStringLiteral("actionAbout"));
+        actionAbout->setObjectName(QString::fromUtf8("actionAbout"));
         actionAbout_2 = new QAction(MainWindow);
-        actionAbout_2->setObjectName(QStringLiteral("actionAbout_2"));
+        actionAbout_2->setObjectName(QString::fromUtf8("actionAbout_2"));
         actionSave_all = new QAction(MainWindow);
-        actionSave_all->setObjectName(QStringLiteral("actionSave_all"));
+        actionSave_all->setObjectName(QString::fromUtf8("actionSave_all"));
         centralWidget = new QWidget(MainWindow);
-        centralWidget->setObjectName(QStringLiteral("centralWidget"));
+        centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         eLPort = new QLineEdit(centralWidget);
-        eLPort->setObjectName(QStringLiteral("eLPort"));
+        eLPort->setObjectName(QString::fromUtf8("eLPort"));
         eLPort->setGeometry(QRect(10, 30, 71, 25));
         eLPort->setCursorPosition(5);
         eRHost = new QLineEdit(centralWidget);
-        eRHost->setObjectName(QStringLiteral("eRHost"));
+        eRHost->setObjectName(QString::fromUtf8("eRHost"));
         eRHost->setGeometry(QRect(90, 30, 251, 25));
         bConnect = new QPushButton(centralWidget);
-        bConnect->setObjectName(QStringLiteral("bConnect"));
+        bConnect->setObjectName(QString::fromUtf8("bConnect"));
         bConnect->setGeometry(QRect(430, 20, 161, 41));
         label = new QLabel(centralWidget);
-        label->setObjectName(QStringLiteral("label"));
+        label->setObjectName(QString::fromUtf8("label"));
         label->setGeometry(QRect(10, 10, 57, 17));
         label_2 = new QLabel(centralWidget);
-        label_2->setObjectName(QStringLiteral("label_2"));
+        label_2->setObjectName(QString::fromUtf8("label_2"));
         label_2->setGeometry(QRect(90, 10, 73, 17));
         label_3 = new QLabel(centralWidget);
-        label_3->setObjectName(QStringLiteral("label_3"));
+        label_3->setObjectName(QString::fromUtf8("label_3"));
         label_3->setGeometry(QRect(350, 10, 72, 17));
         eRPort = new QLineEdit(centralWidget);
-        eRPort->setObjectName(QStringLiteral("eRPort"));
+        eRPort->setObjectName(QString::fromUtf8("eRPort"));
         eRPort->setGeometry(QRect(350, 30, 71, 25));
         groupBox = new QGroupBox(centralWidget);
-        groupBox->setObjectName(QStringLiteral("groupBox"));
+        groupBox->setObjectName(QString::fromUtf8("groupBox"));
         groupBox->setGeometry(QRect(600, 0, 71, 91));
         rTCP = new QRadioButton(groupBox);
-        rTCP->setObjectName(QStringLiteral("rTCP"));
+        rTCP->setObjectName(QString::fromUtf8("rTCP"));
         rTCP->setGeometry(QRect(10, 30, 51, 23));
         rTCP->setChecked(true);
         rUDP = new QRadioButton(groupBox);
-        rUDP->setObjectName(QStringLiteral("rUDP"));
+        rUDP->setObjectName(QString::fromUtf8("rUDP"));
         rUDP->setGeometry(QRect(10, 60, 61, 23));
         chkAutoSend = new QCheckBox(centralWidget);
-        chkAutoSend->setObjectName(QStringLiteral("chkAutoSend"));
+        chkAutoSend->setObjectName(QString::fromUtf8("chkAutoSend"));
         chkAutoSend->setEnabled(true);
         chkAutoSend->setGeometry(QRect(10, 70, 82, 23));
         chkAutoSend->setChecked(false);
         bSend = new QPushButton(centralWidget);
-        bSend->setObjectName(QStringLiteral("bSend"));
+        bSend->setObjectName(QString::fromUtf8("bSend"));
         bSend->setGeometry(QRect(120, 60, 471, 31));
         label_4 = new QLabel(centralWidget);
-        label_4->setObjectName(QStringLiteral("label_4"));
+        label_4->setObjectName(QString::fromUtf8("label_4"));
         label_4->setGeometry(QRect(140, 510, 31, 21));
         eIn = new QLineEdit(centralWidget);
-        eIn->setObjectName(QStringLiteral("eIn"));
+        eIn->setObjectName(QString::fromUtf8("eIn"));
         eIn->setGeometry(QRect(160, 510, 71, 25));
         eIn->setReadOnly(true);
         label_5 = new QLabel(centralWidget);
-        label_5->setObjectName(QStringLiteral("label_5"));
+        label_5->setObjectName(QString::fromUtf8("label_5"));
         label_5->setGeometry(QRect(240, 510, 31, 21));
         eOut = new QLineEdit(centralWidget);
-        eOut->setObjectName(QStringLiteral("eOut"));
+        eOut->setObjectName(QString::fromUtf8("eOut"));
         eOut->setGeometry(QRect(270, 510, 71, 25));
         eOut->setReadOnly(true);
         label_6 = new QLabel(centralWidget);
-        label_6->setObjectName(QStringLiteral("label_6"));
+        label_6->setObjectName(QString::fromUtf8("label_6"));
         label_6->setGeometry(QRect(350, 510, 31, 21));
         eSize = new QLineEdit(centralWidget);
-        eSize->setObjectName(QStringLiteral("eSize"));
+        eSize->setObjectName(QString::fromUtf8("eSize"));
         eSize->setGeometry(QRect(380, 510, 101, 25));
         label_7 = new QLabel(centralWidget);
-        label_7->setObjectName(QStringLiteral("label_7"));
+        label_7->setObjectName(QString::fromUtf8("label_7"));
         label_7->setGeometry(QRect(490, 510, 61, 21));
         eMutation = new QLineEdit(centralWidget);
-        eMutation->setObjectName(QStringLiteral("eMutation"));
+        eMutation->setObjectName(QString::fromUtf8("eMutation"));
         eMutation->setGeometry(QRect(550, 510, 81, 25));
         label_8 = new QLabel(centralWidget);
-        label_8->setObjectName(QStringLiteral("label_8"));
+        label_8->setObjectName(QString::fromUtf8("label_8"));
         label_8->setGeometry(QRect(640, 510, 54, 21));
         lStatus = new QLabel(centralWidget);
-        lStatus->setObjectName(QStringLiteral("lStatus"));
+        lStatus->setObjectName(QString::fromUtf8("lStatus"));
         lStatus->setGeometry(QRect(10, 540, 621, 17));
         label_9 = new QLabel(centralWidget);
-        label_9->setObjectName(QStringLiteral("label_9"));
+        label_9->setObjectName(QString::fromUtf8("label_9"));
         label_9->setGeometry(QRect(10, 510, 31, 21));
         eId = new QLineEdit(centralWidget);
-        eId->setObjectName(QStringLiteral("eId"));
+        eId->setObjectName(QString::fromUtf8("eId"));
         eId->setGeometry(QRect(30, 510, 101, 25));
         eId->setReadOnly(true);
         tHex = new QTableWidget(centralWidget);
-        tHex->setObjectName(QStringLiteral("tHex"));
+        tHex->setObjectName(QString::fromUtf8("tHex"));
         tHex->setGeometry(QRect(5, 101, 671, 401));
         tHex->setMinimumSize(QSize(1, 0));
         QFont font;
-        font.setFamily(QStringLiteral("Unifont"));
+        font.setFamily(QString::fromUtf8("Unifont"));
         font.setPointSize(11);
         font.setBold(false);
         font.setItalic(false);
@@ -194,21 +193,21 @@ public:
         tHex->setFont(font);
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
-        menuBar->setObjectName(QStringLiteral("menuBar"));
+        menuBar->setObjectName(QString::fromUtf8("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 682, 22));
         menuFile = new QMenu(menuBar);
-        menuFile->setObjectName(QStringLiteral("menuFile"));
+        menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuTools = new QMenu(menuBar);
-        menuTools->setObjectName(QStringLiteral("menuTools"));
+        menuTools->setObjectName(QString::fromUtf8("menuTools"));
         menuScripts = new QMenu(menuBar);
-        menuScripts->setObjectName(QStringLiteral("menuScripts"));
+        menuScripts->setObjectName(QString::fromUtf8("menuScripts"));
         menuTools_2 = new QMenu(menuBar);
-        menuTools_2->setObjectName(QStringLiteral("menuTools_2"));
+        menuTools_2->setObjectName(QString::fromUtf8("menuTools_2"));
         menuHelp = new QMenu(menuBar);
-        menuHelp->setObjectName(QStringLiteral("menuHelp"));
+        menuHelp->setObjectName(QString::fromUtf8("menuHelp"));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
-        mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
+        mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
         MainWindow->addToolBar(Qt::TopToolBarArea, mainToolBar);
         QWidget::setTabOrder(eLPort, eRHost);
         QWidget::setTabOrder(eRHost, eRPort);
@@ -246,48 +245,48 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "rproxy - multi protocol reversing proxy", Q_NULLPTR));
-        actionLoad_Hex->setText(QApplication::translate("MainWindow", "Load Hex", Q_NULLPTR));
-        actionLoad_Bin->setText(QApplication::translate("MainWindow", "Load  Bin", Q_NULLPTR));
-        actionSave_Hex->setText(QApplication::translate("MainWindow", "Save Hex", Q_NULLPTR));
-        actionSave_Bin->setText(QApplication::translate("MainWindow", "Save Bin", Q_NULLPTR));
-        actionQuit->setText(QApplication::translate("MainWindow", "Quit", Q_NULLPTR));
-        actionManual->setText(QApplication::translate("MainWindow", "Manual", Q_NULLPTR));
-        actionAbout->setText(QApplication::translate("MainWindow", "About", Q_NULLPTR));
-        actionAbout_2->setText(QApplication::translate("MainWindow", "About", Q_NULLPTR));
-        actionSave_all->setText(QApplication::translate("MainWindow", "Save all", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        eLPort->setToolTip(QApplication::translate("MainWindow", "local port number to open for receiving connections from the client.", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-        eLPort->setText(QApplication::translate("MainWindow", "12345", Q_NULLPTR));
-        eRHost->setText(QApplication::translate("MainWindow", "127.0.0.1", Q_NULLPTR));
-        bConnect->setText(QApplication::translate("MainWindow", "Connect", Q_NULLPTR));
-        label->setText(QApplication::translate("MainWindow", "local port:", Q_NULLPTR));
-        label_2->setText(QApplication::translate("MainWindow", "remote host:", Q_NULLPTR));
-        label_3->setText(QApplication::translate("MainWindow", "remote port:", Q_NULLPTR));
-        eRPort->setText(QApplication::translate("MainWindow", "8080", Q_NULLPTR));
-        groupBox->setTitle(QApplication::translate("MainWindow", "Protocol:", Q_NULLPTR));
-        rTCP->setText(QApplication::translate("MainWindow", "TCP", Q_NULLPTR));
-        rUDP->setText(QApplication::translate("MainWindow", "UDP", Q_NULLPTR));
-        chkAutoSend->setText(QApplication::translate("MainWindow", "Auto send", Q_NULLPTR));
-        bSend->setText(QApplication::translate("MainWindow", ">>> Send >>>", Q_NULLPTR));
-        label_4->setText(QApplication::translate("MainWindow", "IN:", Q_NULLPTR));
-        eIn->setText(QApplication::translate("MainWindow", "0", Q_NULLPTR));
-        label_5->setText(QApplication::translate("MainWindow", "OUT:", Q_NULLPTR));
-        eOut->setText(QApplication::translate("MainWindow", "0", Q_NULLPTR));
-        label_6->setText(QApplication::translate("MainWindow", "Size:", Q_NULLPTR));
-        eSize->setText(QApplication::translate("MainWindow", "0", Q_NULLPTR));
-        label_7->setText(QApplication::translate("MainWindow", "Mutation:", Q_NULLPTR));
-        eMutation->setText(QApplication::translate("MainWindow", "0", Q_NULLPTR));
-        label_8->setText(QApplication::translate("MainWindow", "%", Q_NULLPTR));
-        lStatus->setText(QApplication::translate("MainWindow", "Dissconnected", Q_NULLPTR));
-        label_9->setText(QApplication::translate("MainWindow", "ID:", Q_NULLPTR));
-        eId->setText(QApplication::translate("MainWindow", "0", Q_NULLPTR));
-        menuFile->setTitle(QApplication::translate("MainWindow", "File", Q_NULLPTR));
-        menuTools->setTitle(QApplication::translate("MainWindow", "Edit", Q_NULLPTR));
-        menuScripts->setTitle(QApplication::translate("MainWindow", "Scripts", Q_NULLPTR));
-        menuTools_2->setTitle(QApplication::translate("MainWindow", "Tools", Q_NULLPTR));
-        menuHelp->setTitle(QApplication::translate("MainWindow", "Help", Q_NULLPTR));
+        MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "rproxy - multi protocol reversing proxy", nullptr));
+        actionLoad_Hex->setText(QCoreApplication::translate("MainWindow", "Load Hex", nullptr));
+        actionLoad_Bin->setText(QCoreApplication::translate("MainWindow", "Load  Bin", nullptr));
+        actionSave_Hex->setText(QCoreApplication::translate("MainWindow", "Save Hex", nullptr));
+        actionSave_Bin->setText(QCoreApplication::translate("MainWindow", "Save Bin", nullptr));
+        actionQuit->setText(QCoreApplication::translate("MainWindow", "Quit", nullptr));
+        actionManual->setText(QCoreApplication::translate("MainWindow", "Manual", nullptr));
+        actionAbout->setText(QCoreApplication::translate("MainWindow", "About", nullptr));
+        actionAbout_2->setText(QCoreApplication::translate("MainWindow", "About", nullptr));
+        actionSave_all->setText(QCoreApplication::translate("MainWindow", "Save all", nullptr));
+#if QT_CONFIG(tooltip)
+        eLPort->setToolTip(QCoreApplication::translate("MainWindow", "local port number to open for receiving connections from the client.", nullptr));
+#endif // QT_CONFIG(tooltip)
+        eLPort->setText(QCoreApplication::translate("MainWindow", "12345", nullptr));
+        eRHost->setText(QCoreApplication::translate("MainWindow", "127.0.0.1", nullptr));
+        bConnect->setText(QCoreApplication::translate("MainWindow", "Connect", nullptr));
+        label->setText(QCoreApplication::translate("MainWindow", "local port:", nullptr));
+        label_2->setText(QCoreApplication::translate("MainWindow", "remote host:", nullptr));
+        label_3->setText(QCoreApplication::translate("MainWindow", "remote port:", nullptr));
+        eRPort->setText(QCoreApplication::translate("MainWindow", "8080", nullptr));
+        groupBox->setTitle(QCoreApplication::translate("MainWindow", "Protocol:", nullptr));
+        rTCP->setText(QCoreApplication::translate("MainWindow", "TCP", nullptr));
+        rUDP->setText(QCoreApplication::translate("MainWindow", "UDP", nullptr));
+        chkAutoSend->setText(QCoreApplication::translate("MainWindow", "Auto send", nullptr));
+        bSend->setText(QCoreApplication::translate("MainWindow", ">>> Send >>>", nullptr));
+        label_4->setText(QCoreApplication::translate("MainWindow", "IN:", nullptr));
+        eIn->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
+        label_5->setText(QCoreApplication::translate("MainWindow", "OUT:", nullptr));
+        eOut->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
+        label_6->setText(QCoreApplication::translate("MainWindow", "Size:", nullptr));
+        eSize->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
+        label_7->setText(QCoreApplication::translate("MainWindow", "Mutation:", nullptr));
+        eMutation->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
+        label_8->setText(QCoreApplication::translate("MainWindow", "%", nullptr));
+        lStatus->setText(QCoreApplication::translate("MainWindow", "Dissconnected", nullptr));
+        label_9->setText(QCoreApplication::translate("MainWindow", "ID:", nullptr));
+        eId->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
+        menuFile->setTitle(QCoreApplication::translate("MainWindow", "File", nullptr));
+        menuTools->setTitle(QCoreApplication::translate("MainWindow", "Edit", nullptr));
+        menuScripts->setTitle(QCoreApplication::translate("MainWindow", "Scripts", nullptr));
+        menuTools_2->setTitle(QCoreApplication::translate("MainWindow", "Tools", nullptr));
+        menuHelp->setTitle(QCoreApplication::translate("MainWindow", "Help", nullptr));
     } // retranslateUi
 
 };
