@@ -27,11 +27,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp\
         mainwindow.cpp \
     rsocket.cpp \
-    proxy.cpp
+    proxy.cpp \
+    script.cpp \
+    scriptrule.cpp
 
 HEADERS  += mainwindow.h \
     rsocket.h \
-    proxy.h
+    proxy.h \
+    script.h \
+    scriptrule.h
 
 FORMS    += mainwindow.ui
 QMAKE_CXXFLAGS += -O2 -fnon-call-exceptions

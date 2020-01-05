@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
     saveAll = false;
 
     proxy = new Proxy(this);
+    script = new Script();
     connect(proxy, SIGNAL(setStatus(QString)), this, SLOT(setStatusMessage(QString)));
     connect(proxy, SIGNAL(sigLConnected()), this, SLOT(statLConnected()));
     connect(proxy, SIGNAL(sigRConnected()), this, SLOT(statRConnected()));
@@ -34,6 +35,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
     connect(ui->actionAbout_2, SIGNAL(triggered(bool)), this, SLOT(on_about()));
     connect(ui->actionSave_all, SIGNAL(triggered(bool)), this, SLOT(on_saveAll()));
     connect(ui->actionRadare, SIGNAL(triggered(bool)), this, SLOT(on_radare()));
+    connect(ui->actionLoad_script, SIGNAL(triggered(bool)), this, SLOT(on_script()));
+    connect(ui->actionScripting, SIGNAL(triggered(bool)), this, SLOT(on_help_scripting()));
 
     resetHex();
 
@@ -43,6 +46,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
 
     ui->bSend->setEnabled(false);
     clearStats();
+
 }
 
 MainWindow::~MainWindow() {
@@ -196,6 +200,13 @@ void MainWindow::statConnecting() {
 }
 
 void MainWindow::onEndpointData(char *buff, int sz) {
+    // triggered from proxy by sigEndpointData() data from the endpoint
+    bool ok;
+    int packet_num;
+
+    packet_num = ui->eIn->text().toInt(&ok, 10);
+    script->exec(IN, packet_num, buff, sz);
+
     ui->bSend->setText("<<< Send <<<");
     putBuffer(buff, sz, false);
     if (ui->chkAutoSend->isChecked())
@@ -205,9 +216,21 @@ void MainWindow::onEndpointData(char *buff, int sz) {
 
      if (saveAll)
         binarySave(saveAll_folder+"/"+getFilename().toStdString()+".bin", buff, sz);
+
+
 }
 
 void MainWindow::onClientData(char *buff, int sz) {
+    // triggered from proxy by sigClientData() data from the client
+
+    bool ok;
+    int packet_num;
+
+    // scripting
+    packet_num = ui->eIn->text().toInt(&ok, 10);
+    script->exec(IN, packet_num, buff, sz);
+
+
     ui->bSend->setText(">>> Send >>>");
     putBuffer(buff, sz, true);
     if (ui->chkAutoSend->isChecked())
@@ -266,13 +289,18 @@ void MainWindow::putBuffer(char *buffer, int sz, bool bSend) {
 
 int MainWindow::getBuffer(char *buffer) {
     bool ok;
-    int i, sz, col, row, hex;
+    int i, sz, tblSZ, col, row, hex;
+
+    tblSZ = ui->tHex->columnCount()*ui->tHex->rowCount();
 
     sz = ui->eSize->text().toInt(&ok, 10);
-    if (!ok || sz <0 || sz>1024) {
+    if (!ok || sz <0 || sz>1024 || sz>tblSZ) {
         this->box("bad size");
         return 0;
     }
+
+
+    qDebug() << "tHex size "  << tblSZ << "box size" << sz << endl;
 
     col = 0;
     row = 0;
@@ -500,23 +528,61 @@ void MainWindow::on_about() {
 }
 
 void MainWindow::on_radare() {
-    std::string filename;
+    QString filename;
     QProcess process;
     char *buffer;
     int sz;
 
+    // save tmp bin file
     buffer = (char *)malloc(1024);
     sz = getBuffer(buffer);
-    filename = "/tmp/"+getFilename().toStdString()+".bin";
-    binarySave(filename, buffer, sz);
+    filename = "/tmp/"+getFilename()+".bin";
+    binarySave(filename.toStdString(), buffer, sz);
     free(buffer);
 
+
+    QProcess::execute("x-terminal-emulator -e r2 "+filename);
+    /*
     QStringList args;
     //args << "--e";
     //args << "/usr/bin/r2";
     args << QString::fromStdString(filename);
 
     process.startDetached("/usr/bin/r2", args);
+    */
 }
 
+void MainWindow::on_eSize_editingFinished() {    
+    int sz, tblSZ;
+    bool ok;
+
+    tblSZ = ui->tHex->columnCount()*ui->tHex->rowCount();
+
+    sz = ui->eSize->text().toInt(&ok, 10);
+    if (!ok || sz <0 || sz>1024 || sz>tblSZ) {
+        box("incorrect size");
+    }
+}
+
+void MainWindow::on_eMutation_editingFinished() {
+    qDebug() << "mutation edited" << endl;
+}
+
+void MainWindow::on_script() {
+    std::string filename;
+
+    filename = QFileDialog::getOpenFileName(this,       tr("load script"),
+                                                        "",
+                                                        tr("hex file (*.proxy)")).toStdString();
+
+    if (script->load(filename)) {
+        box("script loaded");
+    } else {
+        box(QString::fromStdString(script->error));
+    }
+}
+
+void MainWindow::on_help_scripting() {
+    box("parameters: [IN|OUT] [packet num] [position] [replacement in hex]\nexample: IN 3 20 3F\nthis means in the third input packet from endpoint, will replace the position 20 with the byte 3F");
+}
 

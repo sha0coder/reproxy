@@ -55,12 +55,16 @@ OBJECTS_DIR   = ./
 SOURCES       = ../reproxy/main.cpp \
 		../reproxy/mainwindow.cpp \
 		../reproxy/rsocket.cpp \
-		../reproxy/proxy.cpp moc_mainwindow.cpp \
+		../reproxy/proxy.cpp \
+		../reproxy/script.cpp \
+		../reproxy/scriptrule.cpp moc_mainwindow.cpp \
 		moc_proxy.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		rsocket.o \
 		proxy.o \
+		script.o \
+		scriptrule.o \
 		moc_mainwindow.o \
 		moc_proxy.o
 DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
@@ -241,10 +245,14 @@ DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		/usr/lib/qt/mkspecs/features/lex.prf \
 		../reproxy/reproxy.pro ../reproxy/mainwindow.h \
 		../reproxy/rsocket.h \
-		../reproxy/proxy.h ../reproxy/main.cpp \
+		../reproxy/proxy.h \
+		../reproxy/script.h \
+		../reproxy/scriptrule.h ../reproxy/main.cpp \
 		../reproxy/mainwindow.cpp \
 		../reproxy/rsocket.cpp \
-		../reproxy/proxy.cpp
+		../reproxy/proxy.cpp \
+		../reproxy/script.cpp \
+		../reproxy/scriptrule.cpp
 QMAKE_TARGET  = reproxy
 DESTDIR       = 
 TARGET        = reproxy
@@ -626,8 +634,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../reproxy/mainwindow.h ../reproxy/rsocket.h ../reproxy/proxy.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../reproxy/main.cpp ../reproxy/mainwindow.cpp ../reproxy/rsocket.cpp ../reproxy/proxy.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../reproxy/mainwindow.h ../reproxy/rsocket.h ../reproxy/proxy.h ../reproxy/script.h ../reproxy/scriptrule.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../reproxy/main.cpp ../reproxy/mainwindow.cpp ../reproxy/rsocket.cpp ../reproxy/proxy.cpp ../reproxy/script.cpp ../reproxy/scriptrule.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../reproxy/mainwindow.ui $(DISTDIR)/
 
 
@@ -666,6 +674,8 @@ compiler_moc_header_clean:
 moc_mainwindow.cpp: ../reproxy/mainwindow.h \
 		../reproxy/proxy.h \
 		../reproxy/rsocket.h \
+		../reproxy/script.h \
+		../reproxy/scriptrule.h \
 		moc_predefs.h \
 		/usr/bin/moc
 	/usr/bin/moc $(DEFINES) --include /home/spinlock/src/reproxy/build-reproxy-Desktop-Debug/moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/spinlock/src/reproxy/reproxy -I/usr/include/qt -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtNetwork -I/usr/include/qt/QtCore -I. -I/usr/include/c++/6 -I/usr/include/x86_64-linux-gnu/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/x86_64-linux-gnu/6/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/6/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include -I/usr/include/c++/9.2.0 -I/usr/include/c++/9.2.0/x86_64-pc-linux-gnu -I/usr/include/c++/9.2.0/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include-fixed -I/usr/include ../reproxy/mainwindow.h -o moc_mainwindow.cpp
@@ -699,12 +709,16 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 
 main.o: ../reproxy/main.cpp ../reproxy/mainwindow.h \
 		../reproxy/proxy.h \
-		../reproxy/rsocket.h
+		../reproxy/rsocket.h \
+		../reproxy/script.h \
+		../reproxy/scriptrule.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../reproxy/main.cpp
 
 mainwindow.o: ../reproxy/mainwindow.cpp ../reproxy/mainwindow.h \
 		../reproxy/proxy.h \
 		../reproxy/rsocket.h \
+		../reproxy/script.h \
+		../reproxy/scriptrule.h \
 		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../reproxy/mainwindow.cpp
 
@@ -714,6 +728,13 @@ rsocket.o: ../reproxy/rsocket.cpp ../reproxy/rsocket.h
 proxy.o: ../reproxy/proxy.cpp ../reproxy/proxy.h \
 		../reproxy/rsocket.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o proxy.o ../reproxy/proxy.cpp
+
+script.o: ../reproxy/script.cpp ../reproxy/script.h \
+		../reproxy/scriptrule.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o script.o ../reproxy/script.cpp
+
+scriptrule.o: ../reproxy/scriptrule.cpp ../reproxy/scriptrule.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scriptrule.o ../reproxy/scriptrule.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

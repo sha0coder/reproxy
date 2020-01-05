@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[29];
-    char stringdata0[332];
+    QByteArrayData data[33];
+    char stringdata0[414];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -60,7 +60,11 @@ QT_MOC_LITERAL(24, 280, 10), // "on_loadHex"
 QT_MOC_LITERAL(25, 291, 10), // "on_loadBin"
 QT_MOC_LITERAL(26, 302, 10), // "on_saveAll"
 QT_MOC_LITERAL(27, 313, 8), // "on_about"
-QT_MOC_LITERAL(28, 322, 9) // "on_radare"
+QT_MOC_LITERAL(28, 322, 9), // "on_radare"
+QT_MOC_LITERAL(29, 332, 9), // "on_script"
+QT_MOC_LITERAL(30, 342, 24), // "on_eSize_editingFinished"
+QT_MOC_LITERAL(31, 367, 28), // "on_eMutation_editingFinished"
+QT_MOC_LITERAL(32, 396, 17) // "on_help_scripting"
 
     },
     "MainWindow\0sigReadyToSend\0\0sz\0"
@@ -72,7 +76,10 @@ QT_MOC_LITERAL(28, 322, 9) // "on_radare"
     "on_bConnect_clicked\0on_bSend_clicked\0"
     "on_actionQuit_triggered\0on_saveHex\0"
     "on_saveBin\0on_loadHex\0on_loadBin\0"
-    "on_saveAll\0on_about\0on_radare"
+    "on_saveAll\0on_about\0on_radare\0on_script\0"
+    "on_eSize_editingFinished\0"
+    "on_eMutation_editingFinished\0"
+    "on_help_scripting"
 };
 #undef QT_MOC_LITERAL
 
@@ -82,7 +89,7 @@ static const uint qt_meta_data_MainWindow[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      20,   14, // methods
+      24,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -90,28 +97,32 @@ static const uint qt_meta_data_MainWindow[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,  114,    2, 0x06 /* Public */,
+       1,    1,  134,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       4,    1,  117,    2, 0x0a /* Public */,
-       6,    0,  120,    2, 0x0a /* Public */,
-       7,    0,  121,    2, 0x0a /* Public */,
-       8,    0,  122,    2, 0x0a /* Public */,
-       9,    0,  123,    2, 0x0a /* Public */,
-      10,    1,  124,    2, 0x0a /* Public */,
-      12,    2,  127,    2, 0x0a /* Public */,
-      15,    2,  132,    2, 0x0a /* Public */,
-      16,    2,  137,    2, 0x0a /* Public */,
-      19,    0,  142,    2, 0x08 /* Private */,
-      20,    0,  143,    2, 0x08 /* Private */,
-      21,    0,  144,    2, 0x08 /* Private */,
-      22,    0,  145,    2, 0x08 /* Private */,
-      23,    0,  146,    2, 0x08 /* Private */,
-      24,    0,  147,    2, 0x08 /* Private */,
-      25,    0,  148,    2, 0x08 /* Private */,
-      26,    0,  149,    2, 0x08 /* Private */,
-      27,    0,  150,    2, 0x08 /* Private */,
-      28,    0,  151,    2, 0x08 /* Private */,
+       4,    1,  137,    2, 0x0a /* Public */,
+       6,    0,  140,    2, 0x0a /* Public */,
+       7,    0,  141,    2, 0x0a /* Public */,
+       8,    0,  142,    2, 0x0a /* Public */,
+       9,    0,  143,    2, 0x0a /* Public */,
+      10,    1,  144,    2, 0x0a /* Public */,
+      12,    2,  147,    2, 0x0a /* Public */,
+      15,    2,  152,    2, 0x0a /* Public */,
+      16,    2,  157,    2, 0x0a /* Public */,
+      19,    0,  162,    2, 0x08 /* Private */,
+      20,    0,  163,    2, 0x08 /* Private */,
+      21,    0,  164,    2, 0x08 /* Private */,
+      22,    0,  165,    2, 0x08 /* Private */,
+      23,    0,  166,    2, 0x08 /* Private */,
+      24,    0,  167,    2, 0x08 /* Private */,
+      25,    0,  168,    2, 0x08 /* Private */,
+      26,    0,  169,    2, 0x08 /* Private */,
+      27,    0,  170,    2, 0x08 /* Private */,
+      28,    0,  171,    2, 0x08 /* Private */,
+      29,    0,  172,    2, 0x08 /* Private */,
+      30,    0,  173,    2, 0x08 /* Private */,
+      31,    0,  174,    2, 0x08 /* Private */,
+      32,    0,  175,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Int,    3,
@@ -126,6 +137,10 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void, 0x80000000 | 13, QMetaType::Int,   14,    3,
     QMetaType::Void, 0x80000000 | 13, QMetaType::Int,   14,    3,
     QMetaType::Void, QMetaType::Int, QMetaType::Int,   17,   18,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -166,6 +181,10 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 17: _t->on_saveAll(); break;
         case 18: _t->on_about(); break;
         case 19: _t->on_radare(); break;
+        case 20: _t->on_script(); break;
+        case 21: _t->on_eSize_editingFinished(); break;
+        case 22: _t->on_eMutation_editingFinished(); break;
+        case 23: _t->on_help_scripting(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -209,13 +228,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 20)
+        if (_id < 24)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 20;
+        _id -= 24;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 20)
+        if (_id < 24)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 20;
+        _id -= 24;
     }
     return _id;
 }

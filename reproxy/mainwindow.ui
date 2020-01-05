@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>682</width>
+    <width>704</width>
     <height>600</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>682</width>
+    <width>600</width>
     <height>600</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>682</width>
+    <width>704</width>
     <height>600</height>
    </size>
   </property>
@@ -63,7 +63,7 @@
      <rect>
       <x>430</x>
       <y>20</y>
-      <width>161</width>
+      <width>181</width>
       <height>41</height>
      </rect>
     </property>
@@ -126,7 +126,7 @@
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>600</x>
+      <x>620</x>
       <y>0</y>
       <width>71</width>
       <height>91</height>
@@ -189,7 +189,7 @@
      <rect>
       <x>120</x>
       <y>60</y>
-      <width>471</width>
+      <width>491</width>
       <height>31</height>
      </rect>
     </property>
@@ -367,7 +367,7 @@
      <rect>
       <x>5</x>
       <y>101</y>
-      <width>671</width>
+      <width>691</width>
       <height>401</height>
      </rect>
     </property>
@@ -393,7 +393,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>682</width>
+     <width>704</width>
      <height>21</height>
     </rect>
    </property>
@@ -418,6 +418,7 @@
     <property name="title">
      <string>Scripts</string>
     </property>
+    <addaction name="actionLoad_script"/>
    </widget>
    <widget class="QMenu" name="menuTools_2">
     <property name="title">
@@ -429,9 +430,9 @@
     <property name="title">
      <string>Help</string>
     </property>
-    <addaction name="actionManual"/>
     <addaction name="separator"/>
     <addaction name="actionAbout_2"/>
+    <addaction name="actionScripting"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTools"/>
@@ -495,6 +496,16 @@
   <action name="actionRadare">
    <property name="text">
     <string>Radare</string>
+   </property>
+  </action>
+  <action name="actionLoad_script">
+   <property name="text">
+    <string>Load script</string>
+   </property>
+  </action>
+  <action name="actionScripting">
+   <property name="text">
+    <string>Scripting</string>
    </property>
   </action>
  </widget>

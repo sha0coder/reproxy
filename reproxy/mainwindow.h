@@ -11,6 +11,7 @@
 #include <thread>
 
 #include "proxy.h"
+#include "script.h"
 
 namespace Ui {
 class MainWindow;
@@ -54,14 +55,20 @@ private slots:
     void on_saveAll();
     void on_about();
     void on_radare();
+    void on_script();
+    void on_eSize_editingFinished();
+    void on_eMutation_editingFinished();            // unused event
+    void on_help_scripting();
 
 private:
     bool saveAll;
     std::string saveAll_folder;
     bool silent;
     Proxy *proxy;
+    Script *script;
     bool isReadyForSend;
     QMutex mutHex;
+
 
     void enableSettings();
     void disableSettings();
