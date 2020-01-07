@@ -6,6 +6,8 @@
 #include <QFileDialog>
 #include <fstream>
 #include <iostream>
+#include <time.h>
+#include <stdlib.h>
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainWindow) {
@@ -14,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainW
     //isReadyForSend = false;
     ui->lStatus->setText("Disconnected.");
     saveAll = false;
+    hexEventEnabled = true;
 
     proxy = new Proxy(this);
     script = new Script();
@@ -106,6 +109,11 @@ void MainWindow::on_hexChanged(int row, int col) {
     QChar *bytes;
     QString hex, data;
     unsigned int h;
+
+    if (!hexEventEnabled)
+        return;
+
+    qDebug() << "on_hexChanged triggered" << endl;
 
     if (mutHex.tryLock()) {
 
@@ -204,8 +212,12 @@ void MainWindow::onEndpointData(char *buff, int sz) {
     bool ok;
     int packet_num;
 
+    // execute script
     packet_num = ui->eIn->text().toInt(&ok, 10);
     script->exec(IN, packet_num, buff, sz);
+
+    // do mutation
+    doMutation(buff, sz);
 
     ui->bSend->setText("<<< Send <<<");
     putBuffer(buff, sz, false);
@@ -226,10 +238,12 @@ void MainWindow::onClientData(char *buff, int sz) {
     bool ok;
     int packet_num;
 
-    // scripting
+    // execute script
     packet_num = ui->eIn->text().toInt(&ok, 10);
     script->exec(IN, packet_num, buff, sz);
 
+    // do mutation
+    doMutation(buff, sz);
 
     ui->bSend->setText(">>> Send >>>");
     putBuffer(buff, sz, true);
@@ -248,7 +262,7 @@ void MainWindow::putBuffer(char *buffer, int sz, bool bSend) {
     int row, col, i=0;
     char hex[5];
 
-    //disconnect(ui->tHex, SIGNAL(cellChanged(int,int)));
+    hexEventEnabled = false;
 
     mutHex.lock();
 
@@ -285,6 +299,7 @@ void MainWindow::putBuffer(char *buffer, int sz, bool bSend) {
     }
 
     mutHex.unlock();
+    hexEventEnabled = false;
 }
 
 int MainWindow::getBuffer(char *buffer) {
@@ -393,7 +408,7 @@ QString MainWindow::getFilename() {
         filename += ui->eOut->text();
     }
 
-    return filename;
+    return filename;    // do mutation
 }
 
 void MainWindow::on_saveBin() {
@@ -552,7 +567,8 @@ void MainWindow::on_radare() {
     */
 }
 
-void MainWindow::on_eSize_editingFinished() {    
+void MainWindow::on_eSize_editingFinished() {
+    // size validation
     int sz, tblSZ;
     bool ok;
 
@@ -565,7 +581,14 @@ void MainWindow::on_eSize_editingFinished() {
 }
 
 void MainWindow::on_eMutation_editingFinished() {
-    qDebug() << "mutation edited" << endl;
+    // mutation validation
+    int mutation;
+    bool ok;
+
+    mutation = ui->eMutation->text().toInt(&ok,10);
+    if (!ok || mutation < 0 || mutation > 100) {
+        box("incorrect mutation %");
+    }
 }
 
 void MainWindow::on_script() {
@@ -586,3 +609,25 @@ void MainWindow::on_help_scripting() {
     box("parameters: [IN|OUT] [packet num] [position] [replacement in hex]\nexample: IN 3 20 3F\nthis means in the third input packet from endpoint, will replace the position 20 with the byte 3F");
 }
 
+void MainWindow::doMutation(char *buffer, int sz) {
+    int bytes2mutate;
+    int mutation;
+    bool ok;
+
+    mutation = ui->eMutation->text().toInt(&ok, 10);
+    if (!ok || mutation < 0 || mutation > 100) {
+        box("incorrect mutation %");
+        return;
+    }
+
+    srand(time(NULL));
+
+    bytes2mutate = mutation*sz/100;
+    for (int i=0; i<bytes2mutate; i++) {
+        int iWhere = rand()%sz;
+        int iWhat = rand()%0xff;
+        //qDebug() << "where " << iWhere << "what " << iWhat << " " << (char)iWhat << " " << (unsigned char)iWhat << endl;
+        buffer[iWhere] = (char)iWhat;
+    }
+
+}

@@ -61,6 +61,7 @@ private slots:
     void on_help_scripting();
 
 private:
+    bool hexEventEnabled;
     bool saveAll;
     std::string saveAll_folder;
     bool silent;
@@ -70,6 +71,7 @@ private:
     QMutex mutHex;
 
 
+
     void enableSettings();
     void disableSettings();
     QString getFilename();
@@ -77,6 +79,7 @@ private:
     void putBuffer(char *buffer, int sz, bool bSend);   // this reads buffer pointer and writes the hex bytes on the screen
     int getBuffer(char *buffer);                        // this gets the hex from the screen and write them on the buffer pointer (sz: 1024)
     void binarySave(std::string filename, char *buffer, int sz);
+    void doMutation(char *buffer, int sz);
 
     void resetHex();
 
