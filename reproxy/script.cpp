@@ -6,6 +6,7 @@ Script::Script() {
 }
 
 /*
+ *   Direction PacketNum Position NewValue
  *   IN 3 20 F3
  */
 
