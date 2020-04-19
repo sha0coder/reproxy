@@ -16,6 +16,7 @@ TEMPLATE = app
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
+CONFIG += static
 
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -38,7 +39,7 @@ HEADERS  += mainwindow.h \
     scriptrule.h
 
 FORMS    += mainwindow.ui
-QMAKE_CXXFLAGS += -O2 -fnon-call-exceptions
+QMAKE_CXXFLAGS += -O2 -fnon-call-exceptions -static -static-libgcc
 
 RESOURCES += \
     res.qrc
