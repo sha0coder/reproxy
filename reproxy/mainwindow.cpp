@@ -11,6 +11,7 @@
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainWindow) {
+    setWindowIcon(QIcon(":/icons/reproxy.png"));
     ui->setupUi(this);
     silent = false;
     //isReadyForSend = false;

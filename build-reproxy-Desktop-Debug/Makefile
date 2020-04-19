@@ -57,7 +57,8 @@ SOURCES       = ../reproxy/main.cpp \
 		../reproxy/rsocket.cpp \
 		../reproxy/proxy.cpp \
 		../reproxy/script.cpp \
-		../reproxy/scriptrule.cpp moc_mainwindow.cpp \
+		../reproxy/scriptrule.cpp qrc_res.cpp \
+		moc_mainwindow.cpp \
 		moc_proxy.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
@@ -65,6 +66,7 @@ OBJECTS       = main.o \
 		proxy.o \
 		script.o \
 		scriptrule.o \
+		qrc_res.o \
 		moc_mainwindow.o \
 		moc_proxy.o
 DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
@@ -450,7 +452,8 @@ Makefile: ../reproxy/reproxy.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /usr/l
 		/usr/lib/qt/mkspecs/features/exceptions.prf \
 		/usr/lib/qt/mkspecs/features/yacc.prf \
 		/usr/lib/qt/mkspecs/features/lex.prf \
-		../reproxy/reproxy.pro
+		../reproxy/reproxy.pro \
+		../reproxy/res.qrc
 	$(QMAKE) -o Makefile ../reproxy/reproxy.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
 /usr/lib/qt/mkspecs/features/spec_pre.prf:
 /usr/lib/qt/mkspecs/common/unix.conf:
@@ -634,6 +637,7 @@ Makefile: ../reproxy/reproxy.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /usr/l
 /usr/lib/qt/mkspecs/features/yacc.prf:
 /usr/lib/qt/mkspecs/features/lex.prf:
 ../reproxy/reproxy.pro:
+../reproxy/res.qrc:
 qmake: FORCE
 	@$(QMAKE) -o Makefile ../reproxy/reproxy.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
 
@@ -648,6 +652,7 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
+	$(COPY_FILE) --parents ../reproxy/res.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../reproxy/mainwindow.h ../reproxy/rsocket.h ../reproxy/proxy.h ../reproxy/script.h ../reproxy/scriptrule.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../reproxy/main.cpp ../reproxy/mainwindow.cpp ../reproxy/rsocket.cpp ../reproxy/proxy.cpp ../reproxy/script.cpp ../reproxy/scriptrule.cpp $(DISTDIR)/
@@ -675,8 +680,14 @@ check: first
 
 benchmark: first
 
-compiler_rcc_make_all:
+compiler_rcc_make_all: qrc_res.cpp
 compiler_rcc_clean:
+	-$(DEL_FILE) qrc_res.cpp
+qrc_res.cpp: ../reproxy/res.qrc \
+		/usr/bin/rcc \
+		../reproxy/reproxy.png
+	/usr/bin/rcc -name res ../reproxy/res.qrc -o qrc_res.cpp
+
 compiler_moc_predefs_make_all: moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) moc_predefs.h
@@ -718,7 +729,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
 
 ####### Compile
 
@@ -750,6 +761,9 @@ script.o: ../reproxy/script.cpp ../reproxy/script.h \
 
 scriptrule.o: ../reproxy/scriptrule.cpp ../reproxy/scriptrule.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scriptrule.o ../reproxy/scriptrule.cpp
+
+qrc_res.o: qrc_res.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_res.o qrc_res.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

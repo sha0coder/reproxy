@@ -39,3 +39,6 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui
 QMAKE_CXXFLAGS += -O2 -fnon-call-exceptions
+
+RESOURCES += \
+    res.qrc
