@@ -11,7 +11,6 @@ Script::Script() {
  */
 
 bool Script::load(string filename) {
-    QString qsline;
     char line[255];
     bool ok;
     ifstream ifs(filename);
@@ -24,7 +23,7 @@ bool Script::load(string filename) {
 
     while (ifs.getline(line, 254)) {
         i++;
-        qsline = QString::fromStdString(string(line));
+        auto qsline = QString(line); //::fromStdString(string(line));
         auto spl = qsline.split(" ");
         if (spl.size() < 4) {
             ifs.close();

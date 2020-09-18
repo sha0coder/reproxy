@@ -8,6 +8,7 @@
 #include <iostream>
 #include <time.h>
 #include <stdlib.h>
+#include <script.h>
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainWindow) {
@@ -62,6 +63,7 @@ void MainWindow::resetHex() {
     titles << "0" << "1" << "2" << "3" << "4" << "5" << "6" << "7" << "8" << "9" << "A" << "B" << "C" << "D" << "E" << "F" << "Data";
     ui->tHex->clear();
     ui->tHex->setColumnCount(17);
+    ui->tHex->setRowCount(0);
     ui->tHex->setHorizontalHeaderLabels(titles);
     for (int i=0; i<16; i++)
         ui->tHex->setColumnWidth(i, 27);
@@ -315,6 +317,7 @@ int MainWindow::getBuffer(char *buffer) {
         return 0;
     }
 
+    memset(buffer, 0, 1024);
 
     qDebug() << "tHex size "  << tblSZ << "box size" << sz << endl;
 
@@ -456,8 +459,10 @@ void MainWindow::on_saveHex() {
     for (int i=0; i<sz; i++) {
         snprintf(hex, 3, "%.2x", buff[i]);
         ofs << hex << " ";
-        if (col++ >= 0xf)
+        if (col++ >= 0xf) {
             ofs << endl;
+            col = 0;
+        }
     }
     ofs.close();
 }
