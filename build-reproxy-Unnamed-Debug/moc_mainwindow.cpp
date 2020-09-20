@@ -6,7 +6,7 @@
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "../../reproxy2/reproxy/mainwindow.h"
+#include "../reproxy/mainwindow.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'mainwindow.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 63
@@ -22,7 +22,7 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      18,   14, // methods
+      24,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -50,6 +50,12 @@ static const uint qt_meta_data_MainWindow[] = {
      349,   11,   11,   11, 0x08,
      362,   11,   11,   11, 0x08,
      375,   11,   11,   11, 0x08,
+     388,   11,   11,   11, 0x08,
+     399,   11,   11,   11, 0x08,
+     411,   11,   11,   11, 0x08,
+     423,   11,   11,   11, 0x08,
+     450,   11,   11,   11, 0x08,
+     481,   11,   11,   11, 0x08,
 
        0        // eod
 };
@@ -65,7 +71,11 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "on_hexChanged(int,int)\0on_bConnect_clicked()\0"
     "on_bSend_clicked()\0on_actionQuit_triggered()\0"
     "on_saveHex()\0on_saveBin()\0on_loadHex()\0"
-    "on_loadBin()\0on_about()\0"
+    "on_loadBin()\0on_saveAll()\0on_about()\0"
+    "on_radare()\0on_script()\0"
+    "on_eSize_editingFinished()\0"
+    "on_eMutation_editingFinished()\0"
+    "on_help_scripting()\0"
 };
 
 void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -91,7 +101,13 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 14: _t->on_saveBin(); break;
         case 15: _t->on_loadHex(); break;
         case 16: _t->on_loadBin(); break;
-        case 17: _t->on_about(); break;
+        case 17: _t->on_saveAll(); break;
+        case 18: _t->on_about(); break;
+        case 19: _t->on_radare(); break;
+        case 20: _t->on_script(); break;
+        case 21: _t->on_eSize_editingFinished(); break;
+        case 22: _t->on_eMutation_editingFinished(); break;
+        case 23: _t->on_help_scripting(); break;
         default: ;
         }
     }
@@ -129,9 +145,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 18)
+        if (_id < 24)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 18;
+        _id -= 24;
     }
     return _id;
 }

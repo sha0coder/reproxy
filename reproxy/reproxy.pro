@@ -39,7 +39,8 @@ HEADERS  += mainwindow.h \
     scriptrule.h
 
 FORMS    += mainwindow.ui
+RESOURCES += \
+    resource.qrc
 QMAKE_CXXFLAGS += -O2 -fnon-call-exceptions -static -static-libgcc
 
-RESOURCES += \
-    res.qrc
+

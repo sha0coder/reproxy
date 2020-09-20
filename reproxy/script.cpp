@@ -1,4 +1,5 @@
 #include "script.h"
+#include <QStringList>
 
 Script::Script() {
     error = "";
@@ -30,7 +31,7 @@ bool Script::load(string filename) {
             error = "syntax error, num of parameters incorrect.";
             return false;
         }
-        if (spl[0][0] != "#" && (spl[0] == "IN" || spl[0] == "OUT")) {
+        if (spl[0][0] != '#' && (spl[0] == "IN" || spl[0] == "OUT")) {
 
             ScriptRule *rule = new ScriptRule();
 

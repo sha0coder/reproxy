@@ -12,7 +12,7 @@
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),  ui(new Ui::MainWindow) {
-    setWindowIcon(QIcon(":/icons/reproxy.png"));
+    //setWindowIcon(QIcon(":/icons/reproxy.png"));
     ui->setupUi(this);
     silent = false;
     //isReadyForSend = false;
@@ -68,6 +68,7 @@ void MainWindow::resetHex() {
     for (int i=0; i<16; i++)
         ui->tHex->setColumnWidth(i, 27);
     ui->tHex->setColumnWidth(16, 250);
+    ui->eSize->setText("0");
     //ui->tHex->insertRow(0);
 }
 
@@ -216,14 +217,14 @@ void MainWindow::onEndpointData(char *buff, int sz) {
     int packet_num;
 
     // execute script
-    packet_num = ui->eIn->text().toInt(&ok, 10);
-    script->exec(IN, packet_num, buff, sz);
+    packet_num = ui->eOut->text().toInt(&ok, 10);
+    script->exec(OUT, packet_num, buff, sz);
 
     // do mutation
     doMutation(buff, sz);
 
     ui->bSend->setText("<<< Send <<<");
-    putBuffer(buff, sz, false);
+    putBuffer(buff, sz, true);
     if (ui->chkAutoSend->isChecked())
         emit sigReadyToSend(sz);
     else
@@ -249,7 +250,7 @@ void MainWindow::onClientData(char *buff, int sz) {
     doMutation(buff, sz);
 
     ui->bSend->setText(">>> Send >>>");
-    putBuffer(buff, sz, true);
+    putBuffer(buff, sz, false);
     if (ui->chkAutoSend->isChecked())
         emit sigReadyToSend(sz);
     else
@@ -563,14 +564,6 @@ void MainWindow::on_radare() {
 
 
     QProcess::execute("x-terminal-emulator -e r2 "+filename);
-    /*
-    QStringList args;
-    //args << "--e";
-    //args << "/usr/bin/r2";
-    args << QString::fromStdString(filename);
-
-    process.startDetached("/usr/bin/r2", args);
-    */
 }
 
 void MainWindow::on_eSize_editingFinished() {
@@ -600,7 +593,7 @@ void MainWindow::on_eMutation_editingFinished() {
 void MainWindow::on_script() {
     std::string filename;
 
-    filename = QFileDialog::getOpenFileName(this,       tr("load script"),
+    filename = QFileDialog::getOpenFileName(this,       tr("load script .proxy"),
                                                         "",
                                                         tr("hex file (*.proxy)")).toStdString();
 
