@@ -22,7 +22,7 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      24,   14, // methods
+      25,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -56,6 +56,7 @@ static const uint qt_meta_data_MainWindow[] = {
      423,   11,   11,   11, 0x08,
      450,   11,   11,   11, 0x08,
      481,   11,   11,   11, 0x08,
+     512,  501,   11,   11, 0x08,
 
        0        // eod
 };
@@ -75,7 +76,8 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "on_radare()\0on_script()\0"
     "on_eSize_editingFinished()\0"
     "on_eMutation_editingFinished()\0"
-    "on_help_scripting()\0"
+    "on_help_scripting()\0row,column\0"
+    "on_tHex_cellChanged(int,int)\0"
 };
 
 void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -108,6 +110,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 21: _t->on_eSize_editingFinished(); break;
         case 22: _t->on_eMutation_editingFinished(); break;
         case 23: _t->on_help_scripting(); break;
+        case 24: _t->on_tHex_cellChanged((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
         default: ;
         }
     }
@@ -145,9 +148,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 24)
+        if (_id < 25)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 24;
+        _id -= 25;
     }
     return _id;
 }

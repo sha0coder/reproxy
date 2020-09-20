@@ -60,6 +60,8 @@ private slots:
     void on_eMutation_editingFinished();            // unused event
     void on_help_scripting();
 
+    void on_tHex_cellChanged(int row, int column);
+
 private:
     bool hexEventEnabled;
     bool saveAll;

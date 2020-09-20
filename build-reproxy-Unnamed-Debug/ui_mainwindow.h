@@ -156,14 +156,14 @@ public:
         label_4->setGeometry(QRect(140, 510, 31, 21));
         eIn = new QLineEdit(centralWidget);
         eIn->setObjectName(QString::fromUtf8("eIn"));
-        eIn->setGeometry(QRect(160, 510, 71, 25));
+        eIn->setGeometry(QRect(160, 510, 61, 25));
         eIn->setReadOnly(true);
         label_5 = new QLabel(centralWidget);
         label_5->setObjectName(QString::fromUtf8("label_5"));
         label_5->setGeometry(QRect(240, 510, 31, 21));
         eOut = new QLineEdit(centralWidget);
         eOut->setObjectName(QString::fromUtf8("eOut"));
-        eOut->setGeometry(QRect(270, 510, 71, 25));
+        eOut->setGeometry(QRect(280, 510, 61, 25));
         eOut->setReadOnly(true);
         label_6 = new QLabel(centralWidget);
         label_6->setObjectName(QString::fromUtf8("label_6"));

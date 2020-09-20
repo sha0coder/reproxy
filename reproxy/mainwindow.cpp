@@ -114,8 +114,8 @@ void MainWindow::on_hexChanged(int row, int col) {
     QString hex, data;
     unsigned int h;
 
-    if (!hexEventEnabled)
-        return;
+    //if (!hexEventEnabled)
+    //    return;
 
     qDebug() << "on_hexChanged triggered" << endl;
 
@@ -629,4 +629,8 @@ void MainWindow::doMutation(char *buffer, int sz) {
         buffer[iWhere] = (char)iWhat;
     }
 
+}
+
+void MainWindow::on_tHex_cellChanged(int row, int column) {
+    on_hexChanged(row, column);
 }
