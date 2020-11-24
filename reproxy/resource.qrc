@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/images">
         <file>truck.ico</file>
+        <file>reproxy.ico</file>
     </qresource>
 </RCC>

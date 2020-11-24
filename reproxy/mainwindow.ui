@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>rproxy - multi protocol reversing proxy</string>
+   <string>RE Proxy - multi protocol reversing proxy</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QLineEdit" name="eLPort">
@@ -394,7 +394,7 @@
      <x>0</x>
      <y>0</y>
      <width>704</width>
-     <height>34</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -411,8 +411,14 @@
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
-     <string>Edit</string>
+     <string>Search</string>
     </property>
+    <addaction name="separator"/>
+    <addaction name="separator"/>
+    <addaction name="actionSearch_Text"/>
+    <addaction name="actionSearch_hexa"/>
+    <addaction name="actionReplace_text"/>
+    <addaction name="actionReplace_hexa"/>
    </widget>
    <widget class="QMenu" name="menuScripts">
     <property name="title">
@@ -434,10 +440,18 @@
     <addaction name="actionAbout_2"/>
     <addaction name="actionScripting"/>
    </widget>
+   <widget class="QMenu" name="menuCrypto">
+    <property name="title">
+     <string>Crypto</string>
+    </property>
+    <addaction name="actionchacha20"/>
+    <addaction name="actionAES"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTools"/>
    <addaction name="menuScripts"/>
    <addaction name="menuTools_2"/>
+   <addaction name="menuCrypto"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -506,6 +520,36 @@
   <action name="actionScripting">
    <property name="text">
     <string>Scripting</string>
+   </property>
+  </action>
+  <action name="actionSearch_Text">
+   <property name="text">
+    <string>Search Text</string>
+   </property>
+  </action>
+  <action name="actionSearch_hexa">
+   <property name="text">
+    <string>Search hexa</string>
+   </property>
+  </action>
+  <action name="actionReplace_text">
+   <property name="text">
+    <string>Replace text</string>
+   </property>
+  </action>
+  <action name="actionReplace_hexa">
+   <property name="text">
+    <string>Replace hexa</string>
+   </property>
+  </action>
+  <action name="actionchacha20">
+   <property name="text">
+    <string>chacha20</string>
+   </property>
+  </action>
+  <action name="actionAES">
+   <property name="text">
+    <string>AES</string>
    </property>
   </action>
  </widget>

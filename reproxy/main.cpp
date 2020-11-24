@@ -8,7 +8,7 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
-    QIcon icon(":/images/truck.ico");
+    QIcon icon(":/images/reproxy.ico");
     a.setWindowIcon(icon);
 
     MainWindow win;
