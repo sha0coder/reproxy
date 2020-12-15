@@ -1,9 +1,6 @@
 #include "script.h"
 #include <QStringList>
 
-class Script {
-
-};
 
 Script::Script() {
     error = "";
