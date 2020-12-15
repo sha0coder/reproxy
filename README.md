@@ -1,6 +1,7 @@
 # reproxy
 multiprocol proxy for reverse engineering communications.
 
-![Screenshot](screenshot.png)
 
+![Screenshot1](img/screenshot.png)
+![Screenshot2](img/kali.png)
 
